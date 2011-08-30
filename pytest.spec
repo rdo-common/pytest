@@ -6,8 +6,8 @@
 %endif
 
 Name:           pytest
-Version:        2.1.0
-Release:        2%{?dist}
+Version:        2.1.1
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -20,15 +20,15 @@ BuildArch:      noarch
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 Requires:       python-setuptools
-BuildRequires:  python-py >= 1.4.4
-Requires:       python-py >= 1.4.4
+BuildRequires:  python-py >= 1.4.5
+Requires:       python-py >= 1.4.5
 BuildRequires:  python-sphinx
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 Requires:       python3-setuptools
-BuildRequires:  python3-py >= 1.4.4
-Requires:       python3-py >= 1.4.4
+BuildRequires:  python3-py >= 1.4.5
+Requires:       python3-py >= 1.4.5
 %endif # with_python3
 # pytest was separated from pylib at that point
 Conflicts:      python-py < 1.4.0
@@ -131,6 +131,9 @@ popd
 
 
 %changelog
+* Sun Aug 28 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.1-1
+- Update to 2.1.1.
+
 * Thu Aug 11 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.0-2
 - Update Requires and BuildRequires tags.
 
