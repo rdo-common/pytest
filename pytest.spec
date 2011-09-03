@@ -7,7 +7,7 @@
 
 Name:           pytest
 Version:        2.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -26,9 +26,7 @@ BuildRequires:  python-sphinx
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
-Requires:       python3-setuptools
 BuildRequires:  python3-py >= 1.4.5
-Requires:       python3-py >= 1.4.5
 %endif # with_python3
 # pytest was separated from pylib at that point
 Conflicts:      python-py < 1.4.0
@@ -41,6 +39,8 @@ py.test provides simple, yet powerful testing for Python.
 %package -n python3-pytest
 Summary:        Simple powerful testing with Python
 Group:          Development/Languages
+Requires:       python3-setuptools
+Requires:       python3-py >= 1.4.5
 
 
 %description -n python3-pytest
@@ -131,6 +131,9 @@ popd
 
 
 %changelog
+* Sat Sep  3 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.1-2
+- Fix: python3 dependencies.
+
 * Sun Aug 28 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.1-1
 - Update to 2.1.1.
 
