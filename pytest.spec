@@ -6,8 +6,8 @@
 %endif
 
 Name:           pytest
-Version:        2.1.1
-Release:        2%{?dist}
+Version:        2.1.3
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -102,11 +102,12 @@ rm -rf %{buildroot}
 
 %check
 PYTHONPATH=%{buildroot}%{python_sitelib} \
-  %{buildroot}%{_bindir}/py.test
+  %{buildroot}%{_bindir}/py.test -r s \
+  -k-TestInvocationVariants.test_cmdline_python_package # issue #74
 %if 0%{?with_python3}
 pushd %{py3dir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
-  %{buildroot}%{_bindir}/py.test-3.*
+  %{buildroot}%{_bindir}/py.test-3.* -r s
 popd
 %endif # with_python3
 
@@ -131,6 +132,12 @@ popd
 
 
 %changelog
+* Wed Oct 26 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.3-1
+- Update to 2.1.3.
+
+* Tue Sep 27 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.2-1
+- Update to 2.1.2.
+
 * Sat Sep  3 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.1-2
 - Fix: python3 dependencies.
 
