@@ -6,7 +6,7 @@
 %endif
 
 Name:           pytest
-Version:        2.1.3
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
@@ -102,8 +102,7 @@ rm -rf %{buildroot}
 
 %check
 PYTHONPATH=%{buildroot}%{python_sitelib} \
-  %{buildroot}%{_bindir}/py.test -r s \
-  -k-TestInvocationVariants.test_cmdline_python_package # issue #74
+  %{buildroot}%{_bindir}/py.test -r s
 %if 0%{?with_python3}
 pushd %{py3dir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
@@ -132,6 +131,9 @@ popd
 
 
 %changelog
+* Tue Dec 13 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.2.0-1
+- Update to 2.2.0.
+
 * Wed Oct 26 2011 Thomas Moschny <thomas.moschny@gmx.de> - 2.1.3-1
 - Update to 2.1.3.
 
