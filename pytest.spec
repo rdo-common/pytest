@@ -6,8 +6,8 @@
 %endif
 
 Name:           pytest
-Version:        2.2.1
-Release:        2%{?dist}
+Version:        2.2.3
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -131,6 +131,9 @@ popd
 
 
 %changelog
+* Wed Feb  8 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.2.3-1
+- Update to 2.2.3.
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
