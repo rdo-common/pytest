@@ -1,4 +1,4 @@
-%if (! 0%{?rhel}) || 0%{?rhel} > 6
+%if 0%{?fedora} > 12
 %global with_python3 1
 %endif
 %if 0%{?rhel} && 0%{?rhel} < 6
@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.2.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -24,7 +24,11 @@ BuildRequires:  python-setuptools
 Requires:       python-setuptools
 BuildRequires:  python-py >= %{pylib_version}
 Requires:       python-py >= %{pylib_version}
+%if 0%{?fedora}
 BuildRequires:  python-sphinx
+%else
+BuildRequires:  python-sphinx10
+%endif # fedora
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
@@ -61,7 +65,11 @@ cp -a . %{py3dir}
 %build
 %{__python} setup.py build
 
+%if 0%{?fedora}
 make -C doc html PYTHONPATH=$(pwd)
+%else
+make -C doc html SPHINXBUILD=sphinx-1.0-build PYTHONPATH=$(pwd)
+%endif # fedora
 
 %if 0%{?with_python3}
 pushd %{py3dir}
@@ -133,6 +141,10 @@ popd
 
 
 %changelog
+* Thu Oct 11 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.2.4-4
+- Add conditional for sphinx on rhel.
+- Remove rhel logic from with_python3 conditional.
+
 * Sat Aug 04 2012 David Malcolm <dmalcolm@redhat.com> - 2.2.4-3
 - rebuild for https://fedoraproject.org/wiki/Features/Python_3.3
 
