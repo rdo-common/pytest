@@ -5,11 +5,11 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-%global pylib_version 1.4.8
+%global pylib_version 1.4.10
 
 Name:           pytest
-Version:        2.2.4
-Release:        4%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -66,9 +66,13 @@ cp -a . %{py3dir}
 %{__python} setup.py build
 
 %if 0%{?fedora}
-make -C doc html PYTHONPATH=$(pwd)
+for l in doc/* ; do
+  make -C $l html PYTHONPATH=$(pwd)
+done
 %else
-make -C doc html SPHINXBUILD=sphinx-1.0-build PYTHONPATH=$(pwd)
+for l in doc/* ; do
+  make -C $l html SPHINXBUILD=sphinx-1.0-build PYTHONPATH=$(pwd)
+done
 %endif # fedora
 
 %if 0%{?with_python3}
@@ -97,8 +101,12 @@ find %{buildroot}%{python3_sitelib} -name '*.py' \
 popd
 %endif # with_python3
 
-# remove hidden file
-rm doc/_build/html/.buildinfo
+mkdir -p _htmldocs/html
+for l in doc/* ; do
+  # remove hidden file
+  rm ${l}/_build/html/.buildinfo
+  mv ${l}/_build/html _htmldocs/html/${l##doc/}
+done
 
 # use 2.X per default
 pushd %{buildroot}%{_bindir}
@@ -112,12 +120,14 @@ rm -rf %{buildroot}
 
 %check
 PYTHONPATH=%{buildroot}%{python_sitelib} \
-  %{buildroot}%{_bindir}/py.test -r s
+  %{buildroot}%{_bindir}/py.test -r s \
+  --ignore=doc/ja
 %if 0%{?with_python3}
 pushd %{py3dir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/py.test-3.* -r s \
-  '-k-TestInvocationVariants.test_python_minus_m_invocation_ok -test_unittest_unexpected_failure'
+  --ignore=doc/ja \
+  --ignore=doc/en/example/py2py3
 popd
 %endif # with_python3
 
@@ -125,7 +135,7 @@ popd
 %files
 %defattr(-,root,root,-)
 %doc CHANGELOG LICENSE README.txt
-%doc doc/_build/html
+%doc _htmldocs/html
 %{_bindir}/py.test
 %{_bindir}/py.test-2.*
 %{python_sitelib}/*
@@ -135,13 +145,18 @@ popd
 %files -n python3-pytest
 %defattr(-,root,root,-)
 %doc CHANGELOG LICENSE README.txt
-%doc doc/_build/html
+%doc _htmldocs/html
 %{_bindir}/py.test-3.*
 %{python3_sitelib}/*
 %endif # with_python3
 
 
 %changelog
+* Sun Oct 21 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.1-1
+- Update to 2.3.1.
+- Re-enable some tests, ignore others.
+- Docs are available in English and Japanese now.
+
 * Thu Oct 11 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.2.4-4
 - Add conditional for sphinx on rhel.
 - Remove rhel logic from with_python3 conditional.
