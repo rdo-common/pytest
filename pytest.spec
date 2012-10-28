@@ -5,10 +5,10 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-%global pylib_version 1.4.10
+%global pylib_version 1.4.11
 
 Name:           pytest
-Version:        2.3.1
+Version:        2.3.2
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
@@ -120,14 +120,11 @@ rm -rf %{buildroot}
 
 %check
 PYTHONPATH=%{buildroot}%{python_sitelib} \
-  %{buildroot}%{_bindir}/py.test -r s \
-  --ignore=doc/ja
+  %{buildroot}%{_bindir}/py.test -r s
 %if 0%{?with_python3}
 pushd %{py3dir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
-  %{buildroot}%{_bindir}/py.test-3.* -r s \
-  --ignore=doc/ja \
-  --ignore=doc/en/example/py2py3
+  %{buildroot}%{_bindir}/py.test-3.* -r s
 popd
 %endif # with_python3
 
@@ -152,6 +149,9 @@ popd
 
 
 %changelog
+* Sun Oct 28 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.2-1
+- Update to 2.3.2.
+
 * Sun Oct 21 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.1-1
 - Update to 2.3.1.
 - Re-enable some tests, ignore others.
