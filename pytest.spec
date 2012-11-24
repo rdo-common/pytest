@@ -5,10 +5,10 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-%global pylib_version 1.4.11
+%global pylib_version 1.4.12
 
 Name:           pytest
-Version:        2.3.2
+Version:        2.3.4
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
@@ -149,6 +149,9 @@ popd
 
 
 %changelog
+* Fri Nov 23 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.4-1
+- Update to 2.3.4.
+
 * Sun Oct 28 2012 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.2-1
 - Update to 2.3.2.
 
