@@ -38,6 +38,18 @@ BuildRequires:  python3-py >= %{pylib_version}
 # pytest was separated from pylib at that point
 Conflicts:      python-py < 1.4.0
 
+# used by the testsuite, if present:
+%if 0%{?fedora}
+BuildRequires:  pexpect
+BuildRequires:  python-twisted-core
+BuildRequires:  python-mock
+%if 0%{?with_python3}
+BuildRequires:  python3-pexpect
+BuildRequires:  python3-mock
+%endif # with_python3
+%endif # fedora
+
+
 %description
 py.test provides simple, yet powerful testing for Python.
 
@@ -155,6 +167,7 @@ popd
 * Sat May 25 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-1
 - Update to 2.3.5.
 - Docutils needed now to build README.html.
+- Add some BR optionally used by the testsuite.
 
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
