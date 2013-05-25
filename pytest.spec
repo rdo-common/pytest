@@ -29,6 +29,7 @@ BuildRequires:  python-sphinx
 %else
 BuildRequires:  python-sphinx10
 %endif # fedora
+BuildRequires:  python-docutils
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
@@ -108,6 +109,8 @@ for l in doc/* ; do
   mv ${l}/_build/html _htmldocs/html/${l##doc/}
 done
 
+rst2html README.rst > README.html
+
 # use 2.X per default
 pushd %{buildroot}%{_bindir}
 ln -snf py.test-2.* py.test
@@ -131,7 +134,7 @@ popd
 
 %files
 %defattr(-,root,root,-)
-%doc CHANGELOG LICENSE README.txt
+%doc CHANGELOG LICENSE README.html
 %doc _htmldocs/html
 %{_bindir}/py.test
 %{_bindir}/py.test-2.*
@@ -141,7 +144,7 @@ popd
 %if 0%{?with_python3}
 %files -n python3-pytest
 %defattr(-,root,root,-)
-%doc CHANGELOG LICENSE README.txt
+%doc CHANGELOG LICENSE README.html
 %doc _htmldocs/html
 %{_bindir}/py.test-3.*
 %{python3_sitelib}/*
@@ -151,6 +154,7 @@ popd
 %changelog
 * Sat May 25 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-1
 - Update to 2.3.5.
+- Docutils needed now to build README.html.
 
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
