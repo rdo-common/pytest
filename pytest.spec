@@ -8,14 +8,14 @@
 %global pylib_version 1.4.12
 
 Name:           pytest
-Version:        2.3.4
-Release:        2%{?dist}
+Version:        2.3.5
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
 License:        MIT
 URL:            http://pytest.org
-Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.zip
+Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -149,6 +149,9 @@ popd
 
 
 %changelog
+* Sat May 25 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-1
+- Update to 2.3.5.
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
