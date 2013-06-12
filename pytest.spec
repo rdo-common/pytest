@@ -24,7 +24,7 @@ BuildRequires:  python-setuptools
 Requires:       python-setuptools
 BuildRequires:  python-py >= %{pylib_version}
 Requires:       python-py >= %{pylib_version}
-%if 0%{?fedora}
+%if 0%{?rhel} > 6 || 0%{?fedora}
 BuildRequires:  python-sphinx
 %else
 BuildRequires:  python-sphinx10
@@ -78,7 +78,7 @@ cp -a . %{py3dir}
 %build
 %{__python} setup.py build
 
-%if 0%{?fedora}
+%if 0%{?rhel} > 6 || 0%{?fedora}
 for l in doc/* ; do
   make -C $l html PYTHONPATH=$(pwd)
 done
@@ -165,6 +165,7 @@ popd
 
 %changelog
 * Wed Jun 12 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-2
+- Use python-sphinx for rhel > 6 (rhbz#973318).
 - Update BR to use python-pexpect instead of pexpect.
 
 * Sat May 25 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-1
