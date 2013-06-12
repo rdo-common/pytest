@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.3.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -40,9 +40,9 @@ Conflicts:      python-py < 1.4.0
 
 # used by the testsuite, if present:
 %if 0%{?fedora}
-BuildRequires:  pexpect
-BuildRequires:  python-twisted-core
+BuildRequires:  python-pexpect
 BuildRequires:  python-mock
+BuildRequires:  python-twisted-core
 %if 0%{?with_python3}
 BuildRequires:  python3-pexpect
 BuildRequires:  python3-mock
@@ -164,6 +164,9 @@ popd
 
 
 %changelog
+* Wed Jun 12 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-2
+- Update BR to use python-pexpect instead of pexpect.
+
 * Sat May 25 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-1
 - Update to 2.3.5.
 - Docutils needed now to build README.html.
