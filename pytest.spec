@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.3.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -40,11 +40,13 @@ Conflicts:      python-py < 1.4.0
 
 # used by the testsuite, if present:
 %if 0%{?fedora}
-BuildRequires:  python-pexpect
+# if pexpect is present, the testsuite fails on F19 due to
+# http://bugs.python.org/issue17998
+#BuildRequires:  python-pexpect
 BuildRequires:  python-mock
 BuildRequires:  python-twisted-core
 %if 0%{?with_python3}
-BuildRequires:  python3-pexpect
+#BuildRequires:  python3-pexpect
 BuildRequires:  python3-mock
 %endif # with_python3
 %endif # fedora
@@ -164,6 +166,9 @@ popd
 
 
 %changelog
+* Thu Jun 13 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-3
+- Disable tests using pexpect for now, fails on F19.
+
 * Wed Jun 12 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.3.5-2
 - Use python-sphinx for rhel > 6 (rhbz#973318).
 - Update BR to use python-pexpect instead of pexpect.
