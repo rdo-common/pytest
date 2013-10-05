@@ -5,11 +5,11 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-%global pylib_version 1.4.12
+%global pylib_version 1.4.17
 
 Name:           pytest
-Version:        2.3.5
-Release:        4%{?dist}
+Version:        2.4.2
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -136,10 +136,12 @@ rm -rf %{buildroot}
 
 
 %check
+PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python_sitelib} \
   %{buildroot}%{_bindir}/py.test -r s
 %if 0%{?with_python3}
 pushd %{py3dir}
+PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/py.test-3.* -r s
 popd
@@ -166,6 +168,10 @@ popd
 
 
 %changelog
+* Sat Oct  5 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.4.2-1
+- Update to 2.4.2.
+- Add buildroot's bindir to PATH while running the testsuite.
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.3.5-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
