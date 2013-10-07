@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -138,12 +138,12 @@ rm -rf %{buildroot}
 %check
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python_sitelib} \
-  %{buildroot}%{_bindir}/py.test -r s
+  %{buildroot}%{_bindir}/py.test -r s testing
 %if 0%{?with_python3}
 pushd %{py3dir}
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
-  %{buildroot}%{_bindir}/py.test-3.* -r s
+  %{buildroot}%{_bindir}/py.test-3.* -r s testing
 popd
 %endif # with_python3
 
@@ -168,6 +168,9 @@ popd
 
 
 %changelog
+* Mon Oct  7 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.4.2-2
+- Only run tests from the 'testing' subdir in %%check.
+
 * Sat Oct  5 2013 Thomas Moschny <thomas.moschny@gmx.de> - 2.4.2-1
 - Update to 2.4.2.
 - Add buildroot's bindir to PATH while running the testsuite.
