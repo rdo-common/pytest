@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -168,6 +168,9 @@ popd
 
 
 %changelog
+* Fri May 09 2014 Dennis Gilmore <dennis@ausil.us> - 2.5.2-2
+- Redbuild for python 3.4
+
 * Fri Apr 18 2014 Thomas Moschny <thomas.moschny@gmx.de> - 2.5.2-1
 - Update to 2.5.2.
 
