@@ -9,7 +9,7 @@
 
 Name:           pytest
 Version:        2.5.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -168,6 +168,9 @@ popd
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.5.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 09 2014 Dennis Gilmore <dennis@ausil.us> - 2.5.2-2
 - Redbuild for python 3.4
 
