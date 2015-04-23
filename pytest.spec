@@ -1,14 +1,16 @@
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%{!?__python2: %global __python2 /usr/bin/python2}
+%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%endif
+
 %if 0%{?fedora}
 %global with_python3 1
-%endif
-%if 0%{?rhel} && 0%{?rhel} < 6
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
 %global pylib_version 1.4.26
 
 Name:           pytest
-Version:        2.6.4
+Version:        2.7.0
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
@@ -19,7 +21,7 @@ Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{versi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
 Requires:       python-setuptools
 BuildRequires:  python-py >= %{pylib_version}
@@ -70,15 +72,18 @@ py.test provides simple, yet powerful testing for Python.
 
 
 %prep
-%setup -q
+%setup -qc -n %{name}-%{version}
+
+mv %{name}-%{version} python2
 
 %if 0%{?with_python3}
-cp -a . %{py3dir}
+cp -a python2 python3
 %endif # with_python3
 
 
 %build
-%{__python} setup.py build
+pushd python2
+%{__python2} setup.py build
 
 %if 0%{?rhel} > 6 || 0%{?fedora}
 for l in doc/* ; do
@@ -89,32 +94,22 @@ for l in doc/* ; do
   make -C $l html SPHINXBUILD=sphinx-1.0-build PYTHONPATH=$(pwd)
 done
 %endif # fedora
+popd
 
 %if 0%{?with_python3}
-pushd %{py3dir}
+pushd python3
 %{__python3} setup.py build
 popd
 %endif # with_python3
 
 
 %install
-rm -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+pushd python2
+%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
 
 # remove shebangs from all scripts
-find %{buildroot}%{python_sitelib} -name '*.py' \
+find %{buildroot}%{python2_sitelib} -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
-
-%if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
-
-# remove shebangs from all scripts
-find %{buildroot}%{python3_sitelib} -name '*.py' \
-     -exec sed -i -e '1{/^#!/d}' {} \;
-
-popd
-%endif # with_python3
 
 mkdir -p _htmldocs/html
 for l in doc/* ; do
@@ -124,6 +119,18 @@ for l in doc/* ; do
 done
 
 rst2html README.rst > README.html
+popd
+
+%if 0%{?with_python3}
+pushd python3
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+
+# remove shebangs from all scripts
+find %{buildroot}%{python3_sitelib} -name '*.py' \
+     -exec sed -i -e '1{/^#!/d}' {} \;
+
+popd
+%endif # with_python3
 
 # use 2.X per default
 pushd %{buildroot}%{_bindir}
@@ -131,16 +138,15 @@ ln -snf py.test-2.* py.test
 popd
 
 
-%clean
-rm -rf %{buildroot}
-
-
 %check
+pushd python2
 PATH=%{buildroot}%{_bindir}:${PATH} \
-PYTHONPATH=%{buildroot}%{python_sitelib} \
+PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %{buildroot}%{_bindir}/py.test -r s testing
+popd
+
 %if 0%{?with_python3}
-pushd %{py3dir}
+pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/py.test-3.* -r s testing
@@ -149,25 +155,41 @@ popd
 
 
 %files
-%defattr(-,root,root,-)
-%doc CHANGELOG LICENSE README.html
-%doc _htmldocs/html
+%doc python2/CHANGELOG
+%doc python2/README.html
+%doc python2/_htmldocs/html
+%if 0%{?_licensedir:1}
+%license python2/LICENSE
+%else
+%doc python2/LICENSE
+%endif # licensedir
 %{_bindir}/py.test
 %{_bindir}/py.test-2.*
-%{python_sitelib}/*
+%{python2_sitelib}/*
 
 
 %if 0%{?with_python3}
 %files -n python3-pytest
-%defattr(-,root,root,-)
-%doc CHANGELOG LICENSE README.html
-%doc _htmldocs/html
+%doc python3/CHANGELOG
+# HTML docs generated with Python2 for now
+%doc python2/README.html
+%doc python2/_htmldocs/html
+%if 0%{?_licensedir:1}
+%license python3/LICENSE
+%else
+%doc python2/LICENSE
+%endif # licensedir
 %{_bindir}/py.test-3.*
 %{python3_sitelib}/*
 %endif # with_python3
 
 
 %changelog
+* Mon Apr 20 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.0-1
+- Update to 2.7.0.
+- Apply updated Python packaging guidelines.
+- Mark LICENSE with %%license.
+
 * Tue Dec  2 2014 Thomas Moschny <thomas.moschny@gmx.de> - 2.6.4-1
 - Update to 2.6.4.
 
