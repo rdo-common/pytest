@@ -10,7 +10,7 @@
 %global pylib_version 1.4.26
 
 Name:           pytest
-Version:        2.7.0
+Version:        2.7.1
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
@@ -185,6 +185,9 @@ popd
 
 
 %changelog
+* Sat May 23 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.1-1
+- Update to 2.7.1.
+
 * Mon Apr 20 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.0-1
 - Update to 2.7.0.
 - Apply updated Python packaging guidelines.
