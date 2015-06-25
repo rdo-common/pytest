@@ -7,11 +7,11 @@
 %global with_python3 1
 %endif
 
-%global pylib_version 1.4.26
+%global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.7.1
-Release:        2%{?dist}
+Version:        2.7.2
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -134,7 +134,7 @@ popd
 
 # use 2.X per default
 pushd %{buildroot}%{_bindir}
-ln -snf py.test-2.* py.test
+ln -snf py.test-%{python2_version} py.test
 popd
 
 
@@ -142,14 +142,14 @@ popd
 pushd python2
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
-  %{buildroot}%{_bindir}/py.test -r s testing
+  %{buildroot}%{_bindir}/py.test-%{python2_version} -r s testing
 popd
 
 %if 0%{?with_python3}
 pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
-  %{buildroot}%{_bindir}/py.test-3.* -r s testing
+  %{buildroot}%{_bindir}/py.test-%{python3_version} -r s testing
 popd
 %endif # with_python3
 
@@ -164,7 +164,7 @@ popd
 %doc python2/LICENSE
 %endif # licensedir
 %{_bindir}/py.test
-%{_bindir}/py.test-2.*
+%{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
 
 
@@ -177,14 +177,18 @@ popd
 %if 0%{?_licensedir:1}
 %license python3/LICENSE
 %else
-%doc python2/LICENSE
+%doc python3/LICENSE
 %endif # licensedir
-%{_bindir}/py.test-3.*
+%{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
 %endif # with_python3
 
 
 %changelog
+* Thu Jun 25 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.2-1
+- Update to 2.7.2.
+- Small fixes.
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.7.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
