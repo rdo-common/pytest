@@ -11,7 +11,7 @@
 
 Name:           pytest
 Version:        2.7.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -52,6 +52,8 @@ BuildRequires:  python-twisted-core
 BuildRequires:  python3-mock
 %endif # with_python3
 %endif # fedora
+Provides:       python2-%{name} = %{version}-%{release}
+%{?python_provide:%python_provide python2-%{name}}
 
 
 %description
@@ -64,6 +66,7 @@ Summary:        Simple powerful testing with Python
 Group:          Development/Languages
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
+%{?python_provide:%python_provide python3-%{name}}
 
 
 %description -n python3-pytest
@@ -185,6 +188,9 @@ popd
 
 
 %changelog
+* Mon Sep 14 2015 Orion Poplawski <orion@cora.nwra.com> - 2.7.2-2
+- Provide python2-pytest, use python_provide macro
+
 * Thu Jun 25 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.2-1
 - Update to 2.7.2.
 - Small fixes.
