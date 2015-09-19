@@ -10,8 +10,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.7.2
-Release:        2%{?dist}
+Version:        2.7.3
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -109,6 +109,7 @@ popd
 %install
 pushd python2
 %{__python2} setup.py install -O1 --skip-build --root %{buildroot}
+ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
 
 # remove shebangs from all scripts
 find %{buildroot}%{python2_sitelib} -name '*.py' \
@@ -127,6 +128,7 @@ popd
 %if 0%{?with_python3}
 pushd python3
 %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
 # remove shebangs from all scripts
 find %{buildroot}%{python3_sitelib} -name '*.py' \
@@ -136,9 +138,7 @@ popd
 %endif # with_python3
 
 # use 2.X per default
-pushd %{buildroot}%{_bindir}
-ln -snf py.test-%{python2_version} py.test
-popd
+ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
 
 
 %check
@@ -167,6 +167,7 @@ popd
 %doc python2/LICENSE
 %endif # licensedir
 %{_bindir}/py.test
+%{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
 
@@ -182,12 +183,17 @@ popd
 %else
 %doc python3/LICENSE
 %endif # licensedir
+%{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
 %endif # with_python3
 
 
 %changelog
+* Thu Sep 17 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.3-1
+- Update to 2.7.3.
+- Provide additional symlinks to the pytest executables (rhbz#1249891).
+
 * Mon Sep 14 2015 Orion Poplawski <orion@cora.nwra.com> - 2.7.2-2
 - Provide python2-pytest, use python_provide macro
 
