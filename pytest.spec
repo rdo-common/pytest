@@ -11,7 +11,7 @@
 
 Name:           pytest
 Version:        2.7.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -190,6 +190,9 @@ popd
 
 
 %changelog
+* Mon Oct 12 2015 Robert Kuska <rkuska@redhat.com> - 2.7.3-2
+- Rebuilt for Python3.5 rebuild
+
 * Thu Sep 17 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.7.3-1
 - Update to 2.7.3.
 - Provide additional symlinks to the pytest executables (rhbz#1249891).
