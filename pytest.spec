@@ -10,8 +10,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.7.3
-Release:        2%{?dist}
+Version:        2.8.2
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -190,6 +190,9 @@ popd
 
 
 %changelog
+* Tue Oct 20 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.8.2-1
+- Update to 2.8.2.
+
 * Mon Oct 12 2015 Robert Kuska <rkuska@redhat.com> - 2.7.3-2
 - Rebuilt for Python3.5 rebuild
 
