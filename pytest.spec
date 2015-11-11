@@ -11,7 +11,7 @@
 
 Name:           pytest
 Version:        2.8.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -190,6 +190,9 @@ popd
 
 
 %changelog
+* Wed Nov 11 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
+
 * Tue Oct 20 2015 Thomas Moschny <thomas.moschny@gmx.de> - 2.8.2-1
 - Update to 2.8.2.
 
