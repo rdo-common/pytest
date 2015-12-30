@@ -10,14 +10,14 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.8.2
-Release:        3%{?dist}
+Version:        2.8.5
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
 License:        MIT
 URL:            http://pytest.org
-Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/pytest-dev/pytest/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -188,6 +188,9 @@ popd
 
 
 %changelog
+* Wed Dec 30 2015 Orion Poplawski <orion@cora.nwra.com> - 2.8.5-1
+- Update to 2.8.5
+
 * Wed Dec 30 2015 Orion Poplawski <orion@cora.nwra.com> - 2.8.2-3
 - Re-enable pexpect in tests
 
