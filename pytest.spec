@@ -11,7 +11,7 @@
 
 Name:           pytest
 Version:        2.8.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -42,13 +42,11 @@ Conflicts:      python-py < 1.4.0
 
 # used by the testsuite, if present:
 %if 0%{?fedora}
-# if pexpect is present, the testsuite fails on F19 due to
-# http://bugs.python.org/issue17998
-#BuildRequires:  python-pexpect
+BuildRequires:  python-pexpect
 BuildRequires:  python-mock
 BuildRequires:  python-twisted-core
 %if 0%{?with_python3}
-#BuildRequires:  python3-pexpect
+BuildRequires:  python3-pexpect
 BuildRequires:  python3-mock
 %endif # with_python3
 %endif # fedora
@@ -190,6 +188,9 @@ popd
 
 
 %changelog
+* Wed Dec 30 2015 Orion Poplawski <orion@cora.nwra.com> - 2.8.2-3
+- Re-enable pexpect in tests
+
 * Wed Nov 11 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
 
