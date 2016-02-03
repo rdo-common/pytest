@@ -11,7 +11,7 @@
 
 Name:           pytest
 Version:        2.8.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 
 Group:          Development/Languages
@@ -84,7 +84,7 @@ cp -a python2 python3
 
 %build
 pushd python2
-%{__python2} setup.py build
+%{py2_build}
 
 %if 0%{?rhel} > 6 || 0%{?fedora}
 for l in doc/* ; do
@@ -99,14 +99,14 @@ popd
 
 %if 0%{?with_python3}
 pushd python3
-%{__python3} setup.py build
+%{py3_build}
 popd
 %endif # with_python3
 
 
 %install
 pushd python2
-%{__python2} setup.py install -O1 --skip-build --root %{buildroot}
+%{py2_install}
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
 
 # remove shebangs from all scripts
@@ -125,7 +125,7 @@ popd
 
 %if 0%{?with_python3}
 pushd python3
-%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+%{py3_install}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
 # remove shebangs from all scripts
@@ -183,11 +183,18 @@ popd
 %endif # licensedir
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
-%{python3_sitelib}/*
+%{python3_sitelib}/_pytest/
+%{python3_sitelib}/pytest.py
+%{python3_sitelib}/pytest-*.egg-info/
+%{python3_sitelib}/__pycache__/*
 %endif # with_python3
 
 
 %changelog
+* Tue Feb 2 2016 Orion Poplawski <orion@cora.nwra.com> - 2.8.7-2
+- Use new python macros
+- Fix python3 package file ownership
+
 * Sun Jan 24 2016 Thomas Moschny <thomas.moschny@gmx.de> - 2.8.7-1
 - Update to 2.8.7.
 
