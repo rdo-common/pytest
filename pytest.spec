@@ -1,107 +1,84 @@
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%{!?__python2: %global __python2 /usr/bin/python2}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%endif
-
-%if 0%{?fedora}
-%global with_python3 1
-%endif
-
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.8.7
-Release:        2%{?dist}
+Version:        2.9.1
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
-
-Group:          Development/Languages
 License:        MIT
 URL:            http://pytest.org
 Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
-BuildRequires:  python-setuptools
-Requires:       python-setuptools
-BuildRequires:  python-py >= %{pylib_version}
-Requires:       python-py >= %{pylib_version}
-%if 0%{?rhel} > 6 || 0%{?fedora}
-BuildRequires:  python-sphinx
-%else
-BuildRequires:  python-sphinx10
-%endif # fedora
-BuildRequires:  python-docutils
-%if 0%{?with_python3}
 BuildRequires:  python3-devel
+BuildRequires:  python2-setuptools
 BuildRequires:  python3-setuptools
+BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python3-py >= %{pylib_version}
-%endif # with_python3
-# pytest was separated from pylib at that point
-Conflicts:      python-py < 1.4.0
-
+BuildRequires:  python-sphinx
+BuildRequires:  python-docutils
 # used by the testsuite, if present:
-%if 0%{?fedora}
-BuildRequires:  python-pexpect
-BuildRequires:  python-mock
-BuildRequires:  python-twisted-core
-%if 0%{?with_python3}
+BuildRequires:  python2-pexpect
 BuildRequires:  python3-pexpect
+BuildRequires:  python-mock
 BuildRequires:  python3-mock
-%endif # with_python3
-%endif # fedora
-Provides:       python2-%{name} = %{version}-%{release}
-%{?python_provide:%python_provide python2-%{name}}
-
+BuildRequires:  python-twisted-core
+#BuildRequires: python3-twisted-core
 
 %description
 py.test provides simple, yet powerful testing for Python.
 
 
-%if 0%{?with_python3}
-%package -n python3-pytest
+%package -n python2-%{name}
+Summary:        Simple powerful testing with Python
+Requires:       python2-setuptools
+Requires:       python2-py >= %{pylib_version}
+%{?python_provide:%python_provide python2-%{name}}
+# the python2 package was named pytest up to 2.8.7-2
+Provides:       %{name} = %{version}-%{release}
+Obsoletes:      %{name} < 2.8.7-3
+
+%description -n python2-%{name}
+py.test provides simple, yet powerful testing for Python.
+
+
+%package -n python3-%{name}
 Summary:        Simple powerful testing with Python
 Group:          Development/Languages
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
 
-
-%description -n python3-pytest
+%description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
-%endif # with_python3
 
 
 %prep
 %setup -qc -n %{name}-%{version}
-
 mv %{name}-%{version} python2
-
-%if 0%{?with_python3}
 cp -a python2 python3
-%endif # with_python3
 
 
 %build
 pushd python2
 %{py2_build}
-
-%if 0%{?rhel} > 6 || 0%{?fedora}
 for l in doc/* ; do
   make -C $l html PYTHONPATH=$(pwd)
 done
-%else
-for l in doc/* ; do
-  make -C $l html SPHINXBUILD=sphinx-1.0-build PYTHONPATH=$(pwd)
+for f in README CHANGELOG CONTRIBUTING ; do
+  rst2html ${f}.rst > ${f}.html
 done
-%endif # fedora
 popd
 
-%if 0%{?with_python3}
 pushd python3
 %{py3_build}
+for l in doc/* ; do
+  make -C $l html PYTHONPATH=$(pwd)
+done
+for f in README CHANGELOG CONTRIBUTING ; do
+  rst2html ${f}.rst > ${f}.html
+done
 popd
-%endif # with_python3
 
 
 %install
@@ -109,9 +86,17 @@ pushd python2
 %{py2_install}
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
 
-# remove shebangs from all scripts
-find %{buildroot}%{python2_sitelib} -name '*.py' \
-     -exec sed -i -e '1{/^#!/d}' {} \;
+mkdir -p _htmldocs/html
+for l in doc/* ; do
+  # remove hidden file
+  rm ${l}/_build/html/.buildinfo
+  mv ${l}/_build/html _htmldocs/html/${l##doc/}
+done
+popd
+
+pushd python3
+%{py3_install}
+ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
 mkdir -p _htmldocs/html
 for l in doc/* ; do
@@ -119,21 +104,13 @@ for l in doc/* ; do
   rm ${l}/_build/html/.buildinfo
   mv ${l}/_build/html _htmldocs/html/${l##doc/}
 done
-
-rst2html README.rst > README.html
 popd
-
-%if 0%{?with_python3}
-pushd python3
-%{py3_install}
-ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
 # remove shebangs from all scripts
-find %{buildroot}%{python3_sitelib} -name '*.py' \
+find %{buildroot}%{python2_sitelib} \
+     %{buildroot}%{python3_sitelib} \
+     -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
-
-popd
-%endif # with_python3
 
 # use 2.X per default
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
@@ -146,51 +123,42 @@ PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %{buildroot}%{_bindir}/py.test-%{python2_version} -r s testing
 popd
 
-%if 0%{?with_python3}
 pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/py.test-%{python3_version} -r s testing
 popd
-%endif # with_python3
 
 
-%files
-%doc python2/CHANGELOG
+%files -n python2-%{name}
+%doc python2/CHANGELOG.html
 %doc python2/README.html
+%doc python2/CONTRIBUTING.html
 %doc python2/_htmldocs/html
-%if 0%{?_licensedir:1}
 %license python2/LICENSE
-%else
-%doc python2/LICENSE
-%endif # licensedir
 %{_bindir}/py.test
 %{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
 
 
-%if 0%{?with_python3}
-%files -n python3-pytest
-%doc python3/CHANGELOG
-# HTML docs generated with Python2 for now
-%doc python2/README.html
-%doc python2/_htmldocs/html
-%if 0%{?_licensedir:1}
+%files -n python3-%{name}
+%doc python3/CHANGELOG.html
+%doc python3/README.html
+%doc python3/CONTRIBUTING.html
+%doc python3/_htmldocs/html
 %license python3/LICENSE
-%else
-%doc python3/LICENSE
-%endif # licensedir
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
-%{python3_sitelib}/_pytest/
-%{python3_sitelib}/pytest.py
-%{python3_sitelib}/pytest-*.egg-info/
-%{python3_sitelib}/__pycache__/*
-%endif # with_python3
+%{python3_sitelib}/*
+%exclude %dir %{python3_sitelib}/__pycache__
 
 
 %changelog
+* Sat Apr  9 2016 Thomas Moschny <thomas.moschny@gmx.de> - 2.9.1-1
+- Update to 2.9.1.
+- Packaging updates.
+
 * Tue Feb 2 2016 Orion Poplawski <orion@cora.nwra.com> - 2.8.7-2
 - Use new python macros
 - Fix python3 package file ownership
