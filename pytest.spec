@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
-Source0:        http://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://files.pythonhosted.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -155,6 +155,9 @@ popd
 
 
 %changelog
+* Tue May 31 2016 Nils Philippsen <nils@redhat.com>
+- fix source URL
+
 * Sat Apr  9 2016 Thomas Moschny <thomas.moschny@gmx.de> - 2.9.1-1
 - Update to 2.9.1.
 - Packaging updates.
