@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
-Source0:        http://files.pythonhosted.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
