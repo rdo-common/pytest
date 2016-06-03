@@ -1,7 +1,7 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.9.1
+Version:        2.9.2
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -155,6 +155,9 @@ popd
 
 
 %changelog
+* Fri Jun  3 2016 Thomas Moschny <thomas.moschny@gmx.de> - 2.9.2-1
+- Update to 2.9.2.
+
 * Tue May 31 2016 Nils Philippsen <nils@redhat.com>
 - fix source URL
 
