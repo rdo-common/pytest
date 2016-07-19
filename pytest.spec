@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        2.9.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -155,6 +155,9 @@ popd
 
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.9.2-2
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Fri Jun  3 2016 Thomas Moschny <thomas.moschny@gmx.de> - 2.9.2-1
 - Update to 2.9.2.
 
