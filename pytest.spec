@@ -1,8 +1,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        2.9.2
-Release:        2%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -17,13 +17,24 @@ BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  python-sphinx
 BuildRequires:  python-docutils
-# used by the testsuite, if present:
-BuildRequires:  python2-pexpect
-BuildRequires:  python3-pexpect
-BuildRequires:  python-mock
+BuildRequires:  python2-hypothesis
+BuildRequires:  python3-hypothesis
+BuildRequires:  python2-pytest-timeout
+BuildRequires:  python3-pytest-timeout
+#BuildRequires:  python2-pexpect
+#BuildRequires:  python3-pexpect
+BuildRequires:  python2-mock
 BuildRequires:  python3-mock
-BuildRequires:  python-twisted-core
-#BuildRequires: python3-twisted-core
+BuildRequires:  python2-twisted
+BuildRequires:  python3-twisted
+BuildRequires:  python-jinja2
+BuildRequires:  python3-jinja2
+BuildRequires:  python2-nose
+BuildRequires:  python3-nose
+BuildRequires:  python2-argcomplete
+BuildRequires:  python3-argcomplete
+BuildRequires:  python2-decorator
+BuildRequires:  python3-decorator
 
 %description
 py.test provides simple, yet powerful testing for Python.
@@ -44,7 +55,6 @@ py.test provides simple, yet powerful testing for Python.
 
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
-Group:          Development/Languages
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
@@ -84,6 +94,9 @@ popd
 %install
 pushd python2
 %{py2_install}
+mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python2_version}
+ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest-2
+mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python2_version}
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
 
 mkdir -p _htmldocs/html
@@ -96,6 +109,9 @@ popd
 
 pushd python3
 %{py3_install}
+mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python3_version}
+ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest-3
+mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python3_version}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
 mkdir -p _htmldocs/html
@@ -113,6 +129,7 @@ find %{buildroot}%{python2_sitelib} \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
 # use 2.X per default
+ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
 
 
@@ -120,13 +137,13 @@ ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
 pushd python2
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
-  %{buildroot}%{_bindir}/py.test-%{python2_version} -r s testing
+  %{buildroot}%{_bindir}/pytest-%{python2_version} -r s testing --timeout=20
 popd
 
 pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
-  %{buildroot}%{_bindir}/py.test-%{python3_version} -r s testing
+  %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing --timeout=20
 popd
 
 
@@ -136,6 +153,9 @@ popd
 %doc python2/CONTRIBUTING.html
 %doc python2/_htmldocs/html
 %license python2/LICENSE
+%{_bindir}/pytest
+%{_bindir}/pytest-2
+%{_bindir}/pytest-%{python2_version}
 %{_bindir}/py.test
 %{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
@@ -148,6 +168,8 @@ popd
 %doc python3/CONTRIBUTING.html
 %doc python3/_htmldocs/html
 %license python3/LICENSE
+%{_bindir}/pytest-3
+%{_bindir}/pytest-%{python3_version}
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
@@ -155,6 +177,10 @@ popd
 
 
 %changelog
+* Fri Sep 30 2016 Thomas Moschny <thomas.moschny@gmx.de> - 3.0.3-1
+- Update to 3.0.3.
+- Update requirements.
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.9.2-2
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
