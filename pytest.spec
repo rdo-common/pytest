@@ -1,7 +1,7 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.0.3
+Version:        3.0.4
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -177,6 +177,9 @@ popd
 
 
 %changelog
+* Mon Nov 28 2016 Thomas Moschny <thomas.moschny@gmx.de> - 3.0.4-1
+- Update to 3.0.4.
+
 * Fri Sep 30 2016 Thomas Moschny <thomas.moschny@gmx.de> - 3.0.3-1
 - Update to 3.0.3.
 - Update requirements.
