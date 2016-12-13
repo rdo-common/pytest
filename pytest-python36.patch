@@ -1,0 +1,24 @@
+diff --git a/testing/test_doctest.py b/testing/test_doctest.py
+index 4ea2cc5..a82071c 100644
+--- a/testing/test_doctest.py
++++ b/testing/test_doctest.py
+@@ -211,8 +211,8 @@ class TestDoctests:
+         # doctest is never executed because of error during hello.py collection
+         result.stdout.fnmatch_lines([
+             "*>>> import asdals*",
+-            "*UNEXPECTED*ImportError*",
+-            "ImportError: No module named *asdal*",
++            "*UNEXPECTED*Error*",
++            "*Error: No module named *asdal*",
+         ])
+ 
+     def test_doctest_unex_importerror_with_module(self, testdir):
+@@ -227,7 +227,7 @@ class TestDoctests:
+         # doctest is never executed because of error during hello.py collection
+         result.stdout.fnmatch_lines([
+             "*ERROR collecting hello.py*",
+-            "*ImportError: No module named *asdals*",
++            "*Error: No module named *asdals*",
+             "*Interrupted: 1 errors during collection*",
+         ])
+ 
