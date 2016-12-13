@@ -11,7 +11,7 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
-%bcond_with timeout
+%bcond_without timeout
 
 # https://github.com/pytest-dev/pytest/issues/2132
 Patch0:         %{name}-python36.patch
