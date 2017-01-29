@@ -1,8 +1,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.0.5
-Release:        2%{?dist}
+Version:        3.0.6
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -12,9 +12,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
 %bcond_without timeout
-
-# https://github.com/pytest-dev/pytest/issues/2132
-Patch0:         %{name}-python36.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -83,10 +80,6 @@ py.test provides simple, yet powerful testing for Python.
 %setup -qc -n %{name}-%{version}
 mv %{name}-%{version} python2
 cp -a python2 python3
-
-pushd python3
-%patch0 -p1
-popd
 
 
 %build
@@ -205,6 +198,10 @@ popd
 
 
 %changelog
+* Sun Jan 29 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.0.6-1
+- Update to 3.0.6.
+- Drop patch applied upstream.
+
 * Tue Dec 13 2016 Miro Hrončok <mhroncok@redhat.com> - 3.0.5-2
 - Rebuild for Python 3.6
 
