@@ -46,6 +46,7 @@ Obsoletes:      %{name} < 2.8.7-3
 %description -n python2-%{name}
 py.test provides simple, yet powerful testing for Python.
 
+%if 0%{?with_python3}
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
 BuildRequires:  python3-devel
@@ -71,13 +72,16 @@ Obsoletes:      platform-python-%{name} < %{version}-%{release}
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
+%endif
 
 %prep
 %autosetup
 
 %build
 %py2_build
+%if 0%{?with_python3}
 %py3_build
+%endif
 for l in doc/* ; do
   make -C $l html PYTHONPATH=$(pwd)
 done
@@ -91,11 +95,13 @@ mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python2_version
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest-2
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python2_version}
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
+%if 0%{?with_python3}
 %py3_install
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python3_version}
 ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest-3
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python3_version}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
+%endif
 
 # use 2.X per default
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
@@ -109,7 +115,10 @@ for l in doc/* ; do
 done
 
 # remove shebangs from all scripts
-find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
+find %{buildroot}%{python2_sitelib} \
+%if 0%{?with_python3}
+     %{buildroot}%{python3_sitelib} \
+%endif
      -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
@@ -121,12 +130,14 @@ PYTHONPATH=%{buildroot}%{python2_sitelib} \
   --timeout=30
   %endif
 
+%if 0%{?with_python3}
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing \
   %if %{with timeout}
   --timeout=30
   %endif
+%endif
 
 %files -n python2-%{name}
 %doc CHANGELOG.html
@@ -144,6 +155,7 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python2_sitelib}/_pytest/
 %{python2_sitelib}/pytest.py*
 
+%if 0%{?with_python3}
 %files -n python3-%{name}
 %doc CHANGELOG.html
 %doc README.html
@@ -158,6 +170,7 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/_pytest/
 %{python3_sitelib}/pytest.py
 %{python3_sitelib}/__pycache__/pytest.*
+%endif
 
 %changelog
 * Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-3
