@@ -18,6 +18,8 @@ BuildRequires:  python2-devel
 BuildRequires:  python3-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  python3-setuptools
+BuildRequires:  python2-setuptools_scm
+BuildRequires:  python3-setuptools_scm
 BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  python-sphinx
@@ -200,6 +202,7 @@ popd
 %changelog
 * Sat Jun  3 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.1.1-1
 - Update to 3.1.1.
+- Add BR on setuptools_scm.
 
 * Wed Mar 15 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.0.7-1
 - Update to 3.0.7.
