@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -200,6 +200,9 @@ popd
 
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Sat Jun  3 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.1.1-1
 - Update to 3.1.1.
 - Add BR on setuptools_scm.
