@@ -1,8 +1,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.1.1
-Release:        2%{?dist}
+Version:        3.1.3
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -22,8 +22,8 @@ BuildRequires:  python2-setuptools_scm
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python3-py >= %{pylib_version}
-BuildRequires:  python-sphinx
-BuildRequires:  python-docutils
+BuildRequires:  %{_bindir}/sphinx-build
+BuildRequires:  %{_bindir}/rst2html
 BuildRequires:  python2-hypothesis
 BuildRequires:  python3-hypothesis
 %if %{with timeout}
@@ -35,14 +35,8 @@ BuildRequires:  python3-pytest-timeout
 BuildRequires:  python2-mock
 BuildRequires:  python3-mock
 BuildRequires:  python2-twisted
-
-# The related Python 3.6 test is erroring, needs investigation
-# The error is:
-# >   import zope.interface as zi
-# E   AttributeError: module 'zope' has no attribute 'interface'
-#BuildRequires:  python3-twisted
-BuildRequires:  python-jinja2
-
+BuildRequires:  python3-twisted
+BuildRequires:  python2-jinja2
 BuildRequires:  python3-jinja2
 BuildRequires:  python2-nose
 BuildRequires:  python3-nose
@@ -200,6 +194,10 @@ popd
 
 
 %changelog
+* Sun Jul 30 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.1.3-1
+- Update to 3.1.3.
+- Update BRs.
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
