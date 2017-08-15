@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -13,42 +13,66 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # that is not possible as it depends on pytest
 %bcond_without timeout
 
+%bcond_without python2
+%bcond_without python3
+%bcond_without platform_python
+
 BuildArch:      noarch
+
+%if %{with python2}
 BuildRequires:  python2-devel
-BuildRequires:  python3-devel
 BuildRequires:  python2-setuptools
-BuildRequires:  python3-setuptools
 BuildRequires:  python2-setuptools_scm
-BuildRequires:  python3-setuptools_scm
 BuildRequires:  python2-py >= %{pylib_version}
-BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  %{_bindir}/sphinx-build
 BuildRequires:  %{_bindir}/rst2html
 BuildRequires:  python2-hypothesis
-BuildRequires:  python3-hypothesis
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
+%endif
+BuildRequires:  python2-mock
+BuildRequires:  python2-twisted
+BuildRequires:  python2-jinja2
+BuildRequires:  python2-nose
+BuildRequires:  python2-argcomplete
+BuildRequires:  python2-decorator
+%endif
+
+%if %{with python3}
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-setuptools_scm
+BuildRequires:  python3-py >= %{pylib_version}
+BuildRequires:  %{_bindir}/sphinx-build
+BuildRequires:  %{_bindir}/rst2html
+BuildRequires:  python3-hypothesis
+%if %{with timeout}
 BuildRequires:  python3-pytest-timeout
 %endif
-#BuildRequires:  python2-pexpect
-#BuildRequires:  python3-pexpect
-BuildRequires:  python2-mock
 BuildRequires:  python3-mock
-BuildRequires:  python2-twisted
 BuildRequires:  python3-twisted
-BuildRequires:  python2-jinja2
 BuildRequires:  python3-jinja2
-BuildRequires:  python2-nose
 BuildRequires:  python3-nose
-BuildRequires:  python2-argcomplete
 BuildRequires:  python3-argcomplete
-BuildRequires:  python2-decorator
 BuildRequires:  python3-decorator
+%endif
+
+%if %{with platform_python}
+BuildRequires:  platform-python-devel
+BuildRequires:  platform-python-setuptools
+BuildRequires:  platform-python-setuptools_scm
+BuildRequires:  platform-python-py >= %{pylib_version}
+# doc requirements are skipped
+# requirements for optional tests are skipped
+BuildRequires:  platform-python-hypothesis
+%endif
+
 
 %description
 py.test provides simple, yet powerful testing for Python.
 
 
+%if %{with python2}
 %package -n python2-%{name}
 Summary:        Simple powerful testing with Python
 Requires:       python2-setuptools
@@ -60,8 +84,10 @@ Obsoletes:      %{name} < 2.8.7-3
 
 %description -n python2-%{name}
 py.test provides simple, yet powerful testing for Python.
+%endif
 
 
+%if %{with python3}
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
 Requires:       python3-setuptools
@@ -70,15 +96,29 @@ Requires:       python3-py >= %{pylib_version}
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
+%endif
+
+
+%if %{with platform_python}
+%package -n platform-python-%{name}
+Summary:        Simple powerful testing with Python
+Requires:       platform-python-setuptools
+Requires:       platform-python-py >= %{pylib_version}
+
+%description -n platform-python-%{name}
+py.test provides simple, yet powerful testing for Python.
+%endif
 
 
 %prep
 %setup -qc -n %{name}-%{version}
 mv %{name}-%{version} python2
 cp -a python2 python3
+cp -a python2 platform-python
 
 
 %build
+%if %{with python2}
 pushd python2
 %{py2_build}
 for l in doc/* ; do
@@ -88,7 +128,9 @@ for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
 popd
+%endif
 
+%if %{with python3}
 pushd python3
 %{py3_build}
 for l in doc/* ; do
@@ -98,9 +140,17 @@ for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
 popd
+%endif
+
+%if %{with platform_python}
+pushd platform-python
+%{platform_py_build}
+popd
+%endif
 
 
 %install
+%if %{with python2}
 pushd python2
 %{py2_install}
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python2_version}
@@ -116,6 +166,13 @@ for l in doc/* ; do
 done
 popd
 
+# remove shebangs from all scripts
+find %{buildroot}%{python2_sitelib} \
+     -name '*.py' \
+     -exec sed -i -e '1{/^#!/d}' {} \;
+%endif
+
+%if %{with python3}
 pushd python3
 %{py3_install}
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python3_version}
@@ -132,17 +189,32 @@ done
 popd
 
 # remove shebangs from all scripts
-find %{buildroot}%{python2_sitelib} \
-     %{buildroot}%{python3_sitelib} \
+find %{buildroot}%{python3_sitelib} \
      -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
+%endif
 
+%if %{with platform_python}
+pushd platform-python
+%{platform_py_install}
+rm %{buildroot}%{_bindir}/pytest
+rm %{buildroot}%{_bindir}/py.test
+
+# remove shebangs from all scripts
+find %{buildroot}%{platform_python_sitelib} \
+     -name '*.py' \
+     -exec sed -i -e '1{/^#!/d}' {} \;
+%endif
+
+%if %{with python2}
 # use 2.X per default
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
+%endif
 
 
 %check
+%if %{with python2}
 pushd python2
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
@@ -152,7 +224,9 @@ PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %endif
 
 popd
+%endif
 
+%if %{with python3}
 pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
@@ -162,8 +236,19 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %endif
 
 popd
+%endif
+
+%if %{with platform_python}
+pushd platform-python
+PATH=%{buildroot}%{_bindir}:${PATH} \
+PYTHONPATH=%{buildroot}%{platform_python_sitelib} \
+  %{__platform_python} -m pytest -r s testing
+
+popd
+%endif
 
 
+%if %{with python2}
 %files -n python2-%{name}
 %doc python2/CHANGELOG.html
 %doc python2/README.html
@@ -177,8 +262,10 @@ popd
 %{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
+%endif
 
 
+%if %{with python3}
 %files -n python3-%{name}
 %doc python3/CHANGELOG.html
 %doc python3/README.html
@@ -191,9 +278,24 @@ popd
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
 %exclude %dir %{python3_sitelib}/__pycache__
+%endif
+
+
+%if %{with platform_python}
+%files -n platform-python-%{name}
+%doc platform-python/CHANGELOG.rst
+%doc platform-python/README.rst
+%doc platform-python/CONTRIBUTING.rst
+%license platform-python/LICENSE
+%{platform_python_sitelib}/*
+%exclude %dir %{platform_python_sitelib}/__pycache__
+%endif
 
 
 %changelog
+* Fri Aug 11 2017 Petr Viktorin <pviktori@redhat.com> - 3.2.1-2
+- Add subpackage for platform-python (https://fedoraproject.org/wiki/Changes/Platform_Python_Stack)
+
 * Wed Aug  9 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.1-1
 - Update to 3.2.1.
 
