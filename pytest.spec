@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -293,6 +293,9 @@ popd
 
 
 %changelog
+* Thu Aug 24 2017 Miro Hrončok <mhroncok@redhat.com> - 3.2.1-3
+- Rebuilt for rhbz#1484607
+
 * Fri Aug 11 2017 Petr Viktorin <pviktori@redhat.com> - 3.2.1-2
 - Add subpackage for platform-python (https://fedoraproject.org/wiki/Changes/Platform_Python_Stack)
 
