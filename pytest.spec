@@ -1,8 +1,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.2.1
-Release:        3%{?dist}
+Version:        3.2.2
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -15,11 +15,22 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 
 %bcond_without python2
 %bcond_without python3
+
+%if 0%{?fedora} >= 27
 %bcond_without platform_python
+%else
+%bcond_with platform_python
+%endif
 
 BuildArch:      noarch
 
+%description
+py.test provides simple, yet powerful testing for Python.
+
+
 %if %{with python2}
+%package -n python2-%{name}
+Summary:        Simple powerful testing with Python
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
@@ -36,9 +47,21 @@ BuildRequires:  python2-jinja2
 BuildRequires:  python2-nose
 BuildRequires:  python2-argcomplete
 BuildRequires:  python2-decorator
+Requires:       python2-setuptools
+Requires:       python2-py >= %{pylib_version}
+%{?python_provide:%python_provide python2-%{name}}
+# the python2 package was named pytest up to 2.8.7-2
+Provides:       %{name} = %{version}-%{release}
+Obsoletes:      %{name} < 2.8.7-3
+
+%description -n python2-%{name}
+py.test provides simple, yet powerful testing for Python.
 %endif
 
+
 %if %{with python3}
+%package -n python3-%{name}
+Summary:        Simple powerful testing with Python
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
@@ -55,41 +78,6 @@ BuildRequires:  python3-jinja2
 BuildRequires:  python3-nose
 BuildRequires:  python3-argcomplete
 BuildRequires:  python3-decorator
-%endif
-
-%if %{with platform_python}
-BuildRequires:  platform-python-devel
-BuildRequires:  platform-python-setuptools
-BuildRequires:  platform-python-setuptools_scm
-BuildRequires:  platform-python-py >= %{pylib_version}
-# doc requirements are skipped
-# requirements for optional tests are skipped
-BuildRequires:  platform-python-hypothesis
-%endif
-
-
-%description
-py.test provides simple, yet powerful testing for Python.
-
-
-%if %{with python2}
-%package -n python2-%{name}
-Summary:        Simple powerful testing with Python
-Requires:       python2-setuptools
-Requires:       python2-py >= %{pylib_version}
-%{?python_provide:%python_provide python2-%{name}}
-# the python2 package was named pytest up to 2.8.7-2
-Provides:       %{name} = %{version}-%{release}
-Obsoletes:      %{name} < 2.8.7-3
-
-%description -n python2-%{name}
-py.test provides simple, yet powerful testing for Python.
-%endif
-
-
-%if %{with python3}
-%package -n python3-%{name}
-Summary:        Simple powerful testing with Python
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
@@ -102,6 +90,13 @@ py.test provides simple, yet powerful testing for Python.
 %if %{with platform_python}
 %package -n platform-python-%{name}
 Summary:        Simple powerful testing with Python
+BuildRequires:  platform-python-devel
+BuildRequires:  platform-python-setuptools
+BuildRequires:  platform-python-setuptools_scm
+BuildRequires:  platform-python-py >= %{pylib_version}
+# doc requirements are skipped
+# requirements for optional tests are skipped
+BuildRequires:  platform-python-hypothesis
 Requires:       platform-python-setuptools
 Requires:       platform-python-py >= %{pylib_version}
 
@@ -220,7 +215,7 @@ PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python2_version} -r s testing \
   %if %{with timeout}
-  --timeout=20
+  --timeout=30
   %endif
 
 popd
@@ -232,7 +227,7 @@ PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing \
   %if %{with timeout}
-  --timeout=20
+  --timeout=30
   %endif
 
 popd
@@ -293,6 +288,11 @@ popd
 
 
 %changelog
+* Sat Sep  9 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.2-1
+- Update to 3.1.2.
+- Move BRs to their respective subpackages.
+- Enable the platform-python subpackage only on F27+.
+
 * Thu Aug 24 2017 Miro Hrončok <mhroncok@redhat.com> - 3.2.1-3
 - Rebuilt for rhbz#1484607
 
