@@ -1,7 +1,7 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.2.2
+Version:        3.2.3
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -288,8 +288,11 @@ popd
 
 
 %changelog
+* Sat Oct  7 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.3-1
+- Update to 3.2.3.
+
 * Sat Sep  9 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.2-1
-- Update to 3.1.2.
+- Update to 3.2.2.
 - Move BRs to their respective subpackages.
 - Enable the platform-python subpackage only on F27+.
 
