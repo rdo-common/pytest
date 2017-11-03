@@ -157,7 +157,7 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/pytest-*.egg-info/
 %{python3_sitelib}/_pytest/
 %{python3_sitelib}/pytest.py
-%{python3_sitelib}/__pycache/pytest.*
+%{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
