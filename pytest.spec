@@ -18,7 +18,6 @@ BuildArch:      noarch
 %description
 py.test provides simple, yet powerful testing for Python.
 
-
 %package -n python2-%{name}
 Summary:        Simple powerful testing with Python
 BuildRequires:  python2-devel
@@ -47,7 +46,6 @@ Obsoletes:      %{name} < 2.8.7-3
 %description -n python2-%{name}
 py.test provides simple, yet powerful testing for Python.
 
-
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
 BuildRequires:  python3-devel
@@ -74,10 +72,8 @@ Obsoletes:      platform-python-%{name} < 3.2.3-2
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
 
-
 %prep
 %autosetup
-
 
 %build
 %py2_build
@@ -88,7 +84,6 @@ done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
-
 
 %install
 %py2_install
@@ -118,7 +113,6 @@ find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
      -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
-
 %check
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
@@ -134,7 +128,6 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
   --timeout=30
   %endif
 
-
 %files -n python2-%{name}
 %doc CHANGELOG.html
 %doc README.html
@@ -149,7 +142,6 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
 
-
 %files -n python3-%{name}
 %doc CHANGELOG.html
 %doc README.html
@@ -162,7 +154,6 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
 %exclude %dir %{python3_sitelib}/__pycache__
-
 
 %changelog
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
