@@ -13,9 +13,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # that is not possible as it depends on pytest
 %bcond_without timeout
 
-%bcond_without python2
-%bcond_without python3
-
 BuildArch:      noarch
 
 %description
@@ -83,92 +80,50 @@ py.test provides simple, yet powerful testing for Python.
 
 
 %prep
-%setup -qc -n %{name}-%{version}
-mv %{name}-%{version} python2
-cp -a python2 python3
+%autosetup
 
 
 %build
-%if %{with python2}
-pushd python2
-%{py2_build}
+%py2_build
+%py3_build
 for l in doc/* ; do
   make -C $l html PYTHONPATH=$(pwd)
 done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
-popd
-%endif
-
-%if %{with python3}
-pushd python3
-%{py3_build}
-for l in doc/* ; do
-  make -C $l html PYTHONPATH=$(pwd)
-done
-for f in README CHANGELOG CONTRIBUTING ; do
-  rst2html ${f}.rst > ${f}.html
-done
-popd
-%endif
 
 
 %install
-%if %{with python2}
-pushd python2
-%{py2_install}
+%py2_install
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python2_version}
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest-2
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python2_version}
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
-
-mkdir -p _htmldocs/html
-for l in doc/* ; do
-  # remove hidden file
-  rm ${l}/_build/html/.buildinfo
-  mv ${l}/_build/html _htmldocs/html/${l##doc/}
-done
-popd
-
-# remove shebangs from all scripts
-find %{buildroot}%{python2_sitelib} \
-     -name '*.py' \
-     -exec sed -i -e '1{/^#!/d}' {} \;
-%endif
-
-%if %{with python3}
-pushd python3
-%{py3_install}
+%py3_install
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python3_version}
 ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest-3
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python3_version}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
+# use 2.X per default
+ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
+ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
+
 mkdir -p _htmldocs/html
 for l in doc/* ; do
   # remove hidden file
   rm ${l}/_build/html/.buildinfo
   mv ${l}/_build/html _htmldocs/html/${l##doc/}
 done
-popd
 
 # remove shebangs from all scripts
-find %{buildroot}%{python3_sitelib} \
+find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
      -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
-%endif
-
-%if %{with python2}
-# use 2.X per default
-ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
-ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
-%endif
 
 
 %check
-%if %{with python2}
-pushd python2
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python2_version} -r s testing \
@@ -176,11 +131,6 @@ PYTHONPATH=%{buildroot}%{python2_sitelib} \
   --timeout=30
   %endif
 
-popd
-%endif
-
-%if %{with python3}
-pushd python3
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing \
@@ -188,17 +138,13 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
   --timeout=30
   %endif
 
-popd
-%endif
 
-
-%if %{with python2}
 %files -n python2-%{name}
-%doc python2/CHANGELOG.html
-%doc python2/README.html
-%doc python2/CONTRIBUTING.html
-%doc python2/_htmldocs/html
-%license python2/LICENSE
+%doc CHANGELOG.html
+%doc README.html
+%doc CONTRIBUTING.html
+%doc _htmldocs/html
+%license LICENSE
 %{_bindir}/pytest
 %{_bindir}/pytest-2
 %{_bindir}/pytest-%{python2_version}
@@ -206,28 +152,26 @@ popd
 %{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
 %{python2_sitelib}/*
-%endif
 
 
-%if %{with python3}
 %files -n python3-%{name}
-%doc python3/CHANGELOG.html
-%doc python3/README.html
-%doc python3/CONTRIBUTING.html
-%doc python3/_htmldocs/html
-%license python3/LICENSE
+%doc CHANGELOG.html
+%doc README.html
+%doc CONTRIBUTING.html
+%doc _htmldocs/html
+%license LICENSE
 %{_bindir}/pytest-3
 %{_bindir}/pytest-%{python3_version}
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/*
 %exclude %dir %{python3_sitelib}/__pycache__
-%endif
 
 
 %changelog
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
 - Remove platform-python subpackage
+- Cleanup conditionals
 
 * Sat Oct  7 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.3-1
 - Update to 3.2.3.
