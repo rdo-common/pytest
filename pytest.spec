@@ -140,7 +140,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{_bindir}/py.test
 %{_bindir}/py.test-2
 %{_bindir}/py.test-%{python2_version}
-%{python2_sitelib}/*
+%{python2_sitelib}/pytest-*.egg-info/
+%{python2_sitelib}/_pytest/
+%{python2_sitelib}/pytest.py*
 
 %files -n python3-%{name}
 %doc CHANGELOG.html
@@ -152,8 +154,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{_bindir}/pytest-%{python3_version}
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
-%{python3_sitelib}/*
-%exclude %dir %{python3_sitelib}/__pycache__
+%{python3_sitelib}/pytest-*.egg-info/
+%{python3_sitelib}/_pytest/
+%{python3_sitelib}/pytest.py
+%{python3_sitelib}/__pycache/pytest.*
 
 %changelog
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
