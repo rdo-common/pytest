@@ -19,7 +19,6 @@ BuildArch:      noarch
 py.test provides simple, yet powerful testing for Python.
 
 
-%if %{with python2}
 %package -n python2-%{name}
 Summary:        Simple powerful testing with Python
 BuildRequires:  python2-devel
@@ -47,10 +46,8 @@ Obsoletes:      %{name} < 2.8.7-3
 
 %description -n python2-%{name}
 py.test provides simple, yet powerful testing for Python.
-%endif
 
 
-%if %{with python3}
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
 BuildRequires:  python3-devel
@@ -76,7 +73,6 @@ Obsoletes:      platform-python-%{name} < 3.2.3-2
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
-%endif
 
 
 %prep
