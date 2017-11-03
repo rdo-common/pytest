@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.2.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -15,12 +15,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 
 %bcond_without python2
 %bcond_without python3
-
-%if 0%{?fedora} >= 27
-%bcond_without platform_python
-%else
-%bcond_with platform_python
-%endif
 
 BuildArch:      noarch
 
@@ -81,26 +75,9 @@ BuildRequires:  python3-decorator
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
+Obsoletes:      platform-python-%{name} < 3.2.3-2
 
 %description -n python3-%{name}
-py.test provides simple, yet powerful testing for Python.
-%endif
-
-
-%if %{with platform_python}
-%package -n platform-python-%{name}
-Summary:        Simple powerful testing with Python
-BuildRequires:  platform-python-devel
-BuildRequires:  platform-python-setuptools
-BuildRequires:  platform-python-setuptools_scm
-BuildRequires:  platform-python-py >= %{pylib_version}
-# doc requirements are skipped
-# requirements for optional tests are skipped
-BuildRequires:  platform-python-hypothesis
-Requires:       platform-python-setuptools
-Requires:       platform-python-py >= %{pylib_version}
-
-%description -n platform-python-%{name}
 py.test provides simple, yet powerful testing for Python.
 %endif
 
@@ -109,7 +86,6 @@ py.test provides simple, yet powerful testing for Python.
 %setup -qc -n %{name}-%{version}
 mv %{name}-%{version} python2
 cp -a python2 python3
-cp -a python2 platform-python
 
 
 %build
@@ -134,12 +110,6 @@ done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
-popd
-%endif
-
-%if %{with platform_python}
-pushd platform-python
-%{platform_py_build}
 popd
 %endif
 
@@ -189,18 +159,6 @@ find %{buildroot}%{python3_sitelib} \
      -exec sed -i -e '1{/^#!/d}' {} \;
 %endif
 
-%if %{with platform_python}
-pushd platform-python
-%{platform_py_install}
-rm %{buildroot}%{_bindir}/pytest
-rm %{buildroot}%{_bindir}/py.test
-
-# remove shebangs from all scripts
-find %{buildroot}%{platform_python_sitelib} \
-     -name '*.py' \
-     -exec sed -i -e '1{/^#!/d}' {} \;
-%endif
-
 %if %{with python2}
 # use 2.X per default
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
@@ -229,15 +187,6 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %if %{with timeout}
   --timeout=30
   %endif
-
-popd
-%endif
-
-%if %{with platform_python}
-pushd platform-python
-PATH=%{buildroot}%{_bindir}:${PATH} \
-PYTHONPATH=%{buildroot}%{platform_python_sitelib} \
-  %{__platform_python} -m pytest -r s testing
 
 popd
 %endif
@@ -276,18 +225,10 @@ popd
 %endif
 
 
-%if %{with platform_python}
-%files -n platform-python-%{name}
-%doc platform-python/CHANGELOG.rst
-%doc platform-python/README.rst
-%doc platform-python/CONTRIBUTING.rst
-%license platform-python/LICENSE
-%{platform_python_sitelib}/*
-%exclude %dir %{platform_python_sitelib}/__pycache__
-%endif
-
-
 %changelog
+* Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
+- Remove platform-python subpackage
+
 * Sat Oct  7 2017 Thomas Moschny <thomas.moschny@gmx.de> - 3.2.3-1
 - Update to 3.2.3.
 
