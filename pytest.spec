@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.2.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -67,7 +67,7 @@ BuildRequires:  python3-decorator
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
-Obsoletes:      platform-python-%{name} < 3.2.3-2
+Obsoletes:      platform-python-%{name} < %{version}-%{release}
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
@@ -160,6 +160,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Nov 07 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-3
+- Use better Obsoletes for platform-python
+
 * Fri Nov 03 2017 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.2.3-2
 - Remove platform-python subpackage
 - Cleanup conditionals
