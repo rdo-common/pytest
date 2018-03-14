@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -37,6 +37,10 @@ BuildRequires:  python2-jinja2
 BuildRequires:  python2-nose
 BuildRequires:  python2-argcomplete
 BuildRequires:  python2-decorator
+Requires:       python2-attrs
+Requires:       python2-funcsigs
+Requires:       python2-pluggy
+Requires:       python2-six
 Requires:       python2-setuptools
 Requires:       python2-py >= %{pylib_version}
 %{?python_provide:%python_provide python2-%{name}}
@@ -66,6 +70,9 @@ BuildRequires:  python3-jinja2
 BuildRequires:  python3-nose
 BuildRequires:  python3-argcomplete
 BuildRequires:  python3-decorator
+Requires:       python3-attrs
+Requires:       python3-pluggy
+Requires:       python3-six
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
@@ -162,6 +169,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Thu Mar 15 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.4.2-2
+- Add Requires for required modules
+
 * Wed Mar 14 2018 Charalampos Stratakis <cstratak@redhat.com> - 3.4.2-1
 - Update to 3.4.2
 
