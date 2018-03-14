@@ -1,8 +1,8 @@
 %global pylib_version 1.4.29
 
 Name:           pytest
-Version:        3.2.3
-Release:        4%{?dist}
+Version:        3.4.2
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -31,6 +31,7 @@ BuildRequires:  python2-hypothesis
 BuildRequires:  python2-pytest-timeout
 %endif
 BuildRequires:  python2-mock
+BuildRequires:  python2-pluggy
 BuildRequires:  python2-twisted
 BuildRequires:  python2-jinja2
 BuildRequires:  python2-nose
@@ -59,6 +60,7 @@ BuildRequires:  python3-hypothesis
 BuildRequires:  python3-pytest-timeout
 %endif
 BuildRequires:  python3-mock
+BuildRequires:  python3-pluggy
 BuildRequires:  python3-twisted
 BuildRequires:  python3-jinja2
 BuildRequires:  python3-nose
@@ -160,6 +162,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Wed Mar 14 2018 Charalampos Stratakis <cstratak@redhat.com> - 3.4.2-1
+- Update to 3.4.2
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.3-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
