@@ -13,6 +13,12 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # that is not possible as it depends on pytest
 %bcond_without timeout
 
+# When building pytest for the first time with new Python version
+# we might not yet have all the BRs, this allows us to build without some that
+# are likely not yet built.
+# Pytest will skip the related tests, so we only conditionalize the BRs
+%bcond_without optional_tests
+
 BuildRequires:  %{_bindir}/sphinx-build-3
 BuildRequires:  python3-sphinxcontrib-trio
 BuildRequires:  %{_bindir}/rst2html
@@ -24,29 +30,37 @@ py.test provides simple, yet powerful testing for Python.
 
 %package -n python2-%{name}
 Summary:        Simple powerful testing with Python
+BuildRequires:  python2-attrs
 BuildRequires:  python2-devel
+BuildRequires:  python2-hypothesis
+BuildRequires:  python2-more-itertools >= 4.0.0
+BuildRequires:  python2-pluggy
+BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
-BuildRequires:  python2-py >= %{pylib_version}
-BuildRequires:  python2-hypothesis
+BuildRequires:  python2-six
+
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
 %endif
-BuildRequires:  python2-mock
-BuildRequires:  python2-pluggy
-BuildRequires:  python2-twisted
-BuildRequires:  python2-jinja2
-BuildRequires:  python2-nose
+
+%if %{with optional_tests}
 BuildRequires:  python2-argcomplete
 BuildRequires:  python2-decorator
-BuildRequires:  python2-more-itertools >= 4.0.0
+BuildRequires:  python2-jinja2
+BuildRequires:  python2-mock
+BuildRequires:  python2-nose
+BuildRequires:  python2-twisted
+%endif
+
 Requires:       python2-attrs
 Requires:       python2-funcsigs
-Requires:       python2-pluggy
-Requires:       python2-six
 Requires:       python2-more-itertools >= 4.0.0
-Requires:       python2-setuptools
+Requires:       python2-pluggy
 Requires:       python2-py >= %{pylib_version}
+Requires:       python2-setuptools
+Requires:       python2-six
+
 %{?python_provide:%python_provide python2-%{name}}
 # the python2 package was named pytest up to 2.8.7-2
 Provides:       %{name} = %{version}-%{release}
@@ -57,28 +71,36 @@ py.test provides simple, yet powerful testing for Python.
 
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
+BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
+BuildRequires:  python3-hypothesis
+BuildRequires:  python3-more-itertools
+BuildRequires:  python3-pluggy
+BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
-BuildRequires:  python3-py >= %{pylib_version}
-BuildRequires:  python3-hypothesis
+BuildRequires:  python3-six
+
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
 %endif
-BuildRequires:  python3-mock
-BuildRequires:  python3-pluggy
-BuildRequires:  python3-twisted
-BuildRequires:  python3-jinja2
-BuildRequires:  python3-nose
+
+%if %{with optional_tests}
 BuildRequires:  python3-argcomplete
 BuildRequires:  python3-decorator
-BuildRequires:  python3-more-itertools
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-mock
+BuildRequires:  python3-nose
+BuildRequires:  python3-twisted
+%endif
+
 Requires:       python3-attrs
-Requires:       python3-pluggy
-Requires:       python3-six
 Requires:       python3-more-itertools
-Requires:       python3-setuptools
+Requires:       python3-pluggy
 Requires:       python3-py >= %{pylib_version}
+Requires:       python3-setuptools
+Requires:       python3-six
+
 %{?python_provide:%python_provide python3-%{name}}
 Obsoletes:      platform-python-%{name} < %{version}-%{release}
 
