@@ -38,6 +38,7 @@ py.test provides simple, yet powerful testing for Python.
 Summary:        Simple powerful testing with Python
 BuildRequires:  python2-attrs
 BuildRequires:  python2-devel
+BuildRequires:  python2-funcsigs
 BuildRequires:  python2-hypothesis
 BuildRequires:  python2-more-itertools >= 4.0.0
 BuildRequires:  python2-pluggy
