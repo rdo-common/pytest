@@ -19,9 +19,15 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # Pytest will skip the related tests, so we only conditionalize the BRs
 %bcond_without optional_tests
 
+# When building pytest for the first time with new Python version
+# we also don't have sphinx yet and cannot build docs.
+%bcond_without docs
+
+%if %{with docs}
 BuildRequires:  %{_bindir}/sphinx-build-3
 BuildRequires:  python3-sphinxcontrib-trio
 BuildRequires:  %{_bindir}/rst2html
+%endif
 
 BuildArch:      noarch
 
@@ -113,12 +119,15 @@ py.test provides simple, yet powerful testing for Python.
 %build
 %py2_build
 %py3_build
+
+%if %{with docs}
 for l in doc/* ; do
   make -C $l html PYTHONPATH=$(pwd) SPHINXBUILD=%{_bindir}/sphinx-build-3
 done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
 done
+%endif
 
 %install
 %py2_install
@@ -136,12 +145,14 @@ ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
 ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
 
+%if %{with docs}
 mkdir -p _htmldocs/html
 for l in doc/* ; do
   # remove hidden file
   rm ${l}/_build/html/.buildinfo
   mv ${l}/_build/html _htmldocs/html/${l##doc/}
 done
+%endif
 
 # remove shebangs from all scripts
 find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
@@ -164,10 +175,12 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %endif
 
 %files -n python2-%{name}
+%if %{with docs}
 %doc CHANGELOG.html
 %doc README.html
 %doc CONTRIBUTING.html
 %doc _htmldocs/html
+%endif
 %license LICENSE
 %{_bindir}/pytest
 %{_bindir}/pytest-2
@@ -180,10 +193,12 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python2_sitelib}/pytest.py*
 
 %files -n python3-%{name}
+%if %{with docs}
 %doc CHANGELOG.html
 %doc README.html
 %doc CONTRIBUTING.html
 %doc _htmldocs/html
+%endif
 %license LICENSE
 %{_bindir}/pytest-3
 %{_bindir}/pytest-%{python3_version}
