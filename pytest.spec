@@ -1,8 +1,8 @@
-%global pylib_version 1.4.29
+%global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.4.2
-Release:        2%{?dist}
+Version:        3.5.1
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -12,6 +12,10 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
 %bcond_without timeout
+
+BuildRequires:  %{_bindir}/sphinx-build-3
+BuildRequires:  python3-sphinxcontrib-trio
+BuildRequires:  %{_bindir}/rst2html
 
 BuildArch:      noarch
 
@@ -24,8 +28,6 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
 BuildRequires:  python2-py >= %{pylib_version}
-BuildRequires:  %{_bindir}/sphinx-build
-BuildRequires:  %{_bindir}/rst2html
 BuildRequires:  python2-hypothesis
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
@@ -37,10 +39,12 @@ BuildRequires:  python2-jinja2
 BuildRequires:  python2-nose
 BuildRequires:  python2-argcomplete
 BuildRequires:  python2-decorator
+BuildRequires:  python2-more-itertools >= 4.0.0
 Requires:       python2-attrs
 Requires:       python2-funcsigs
 Requires:       python2-pluggy
 Requires:       python2-six
+Requires:       python2-more-itertools >= 4.0.0
 Requires:       python2-setuptools
 Requires:       python2-py >= %{pylib_version}
 %{?python_provide:%python_provide python2-%{name}}
@@ -57,8 +61,6 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-py >= %{pylib_version}
-BuildRequires:  %{_bindir}/sphinx-build
-BuildRequires:  %{_bindir}/rst2html
 BuildRequires:  python3-hypothesis
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
@@ -70,9 +72,11 @@ BuildRequires:  python3-jinja2
 BuildRequires:  python3-nose
 BuildRequires:  python3-argcomplete
 BuildRequires:  python3-decorator
+BuildRequires:  python3-more-itertools
 Requires:       python3-attrs
 Requires:       python3-pluggy
 Requires:       python3-six
+Requires:       python3-more-itertools
 Requires:       python3-setuptools
 Requires:       python3-py >= %{pylib_version}
 %{?python_provide:%python_provide python3-%{name}}
@@ -88,7 +92,7 @@ py.test provides simple, yet powerful testing for Python.
 %py2_build
 %py3_build
 for l in doc/* ; do
-  make -C $l html PYTHONPATH=$(pwd)
+  make -C $l html PYTHONPATH=$(pwd) SPHINXBUILD=%{_bindir}/sphinx-build-3
 done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
@@ -169,6 +173,11 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Sat May 19 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.5.1-1
+- Update to 3.5.1.
+- Build the documentation with Python3.
+- Update requirements.
+
 * Thu Mar 15 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.4.2-2
 - Add Requires for required modules
 
