@@ -1,7 +1,7 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.5.1
+Version:        3.6.0
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -36,6 +36,7 @@ py.test provides simple, yet powerful testing for Python.
 
 %package -n python2-%{name}
 Summary:        Simple powerful testing with Python
+BuildRequires:  python2-atomicwrites
 BuildRequires:  python2-attrs
 BuildRequires:  python2-devel
 BuildRequires:  python2-funcsigs
@@ -60,6 +61,7 @@ BuildRequires:  python2-nose
 BuildRequires:  python2-twisted
 %endif
 
+Requires:       python2-atomicwrites
 Requires:       python2-attrs
 Requires:       python2-funcsigs
 Requires:       python2-more-itertools >= 4.0.0
@@ -78,6 +80,7 @@ py.test provides simple, yet powerful testing for Python.
 
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
+BuildRequires:  python3-atomicwrites
 BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
@@ -101,6 +104,7 @@ BuildRequires:  python3-nose
 BuildRequires:  python3-twisted
 %endif
 
+Requires:       python3-atomicwrites
 Requires:       python3-attrs
 Requires:       python3-more-itertools
 Requires:       python3-pluggy
@@ -211,6 +215,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Mon May 28 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.0-1
+- Update to 3.6.0 (#1581692)
+- Require and BuildRequire atomicwrites
+
 * Sat May 19 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.5.1-1
 - Update to 3.5.1.
 - Build the documentation with Python3.
