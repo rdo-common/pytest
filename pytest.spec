@@ -1,7 +1,7 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.6.0
+Version:        3.6.1
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -215,6 +215,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Jun  5 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.6.1-1
+- Update to 3.6.1.
+
 * Mon May 28 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.0-1
 - Update to 3.6.0 (#1581692)
 - Require and BuildRequire atomicwrites
