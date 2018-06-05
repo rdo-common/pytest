@@ -127,7 +127,7 @@ py.test provides simple, yet powerful testing for Python.
 
 %if %{with docs}
 for l in doc/* ; do
-  make -C $l html PYTHONPATH=$(pwd) SPHINXBUILD=%{_bindir}/sphinx-build-3
+  make -C $l html PYTHONPATH=$(pwd)/src SPHINXBUILD=%{_bindir}/sphinx-build-3
 done
 for f in README CHANGELOG CONTRIBUTING ; do
   rst2html ${f}.rst > ${f}.html
