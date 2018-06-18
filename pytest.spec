@@ -1,11 +1,8 @@
-%global _without_docs 1
-%global _without_optional_tests 1
-%global _without_timeout 1
 %global pylib_version 1.5.0
 
 Name:           pytest
 Version:        3.6.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -218,6 +215,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Mon Jun 18 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.1-3
+- Rebuilt for Python 3.7
+
 * Thu Jun 14 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.1-2
 - Bootstrap for Python 3.7
 
