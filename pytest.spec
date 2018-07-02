@@ -11,7 +11,7 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
-%bcond_without timeout
+%bcond_with timeout
 
 # When building pytest for the first time with new Python version
 # we might not yet have all the BRs, this allows us to build without some that
@@ -216,7 +216,7 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 
 %changelog
 * Mon Jul 02 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.2-2
-- Rebuilt for Python 3.7
+- Rebuilt for Python 3.7 (without timeout)
 
 * Thu Jun 28 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.6.2-1
 - Update to 3.6.2.
