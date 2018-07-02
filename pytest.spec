@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -11,7 +11,7 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
-%bcond_with timeout
+%bcond_without timeout
 
 # When building pytest for the first time with new Python version
 # we might not yet have all the BRs, this allows us to build without some that
@@ -215,6 +215,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Mon Jul 02 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.2-3
+- Enable timeout
+
 * Mon Jul 02 2018 Miro Hrončok <mhroncok@redhat.com> - 3.6.2-2
 - Rebuilt for Python 3.7 (without timeout)
 
