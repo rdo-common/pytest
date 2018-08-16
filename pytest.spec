@@ -53,7 +53,6 @@ BuildRequires:  python2-pytest-timeout
 %endif
 
 %if %{with optional_tests}
-BuildRequires:  python2-argcomplete
 BuildRequires:  python2-decorator
 BuildRequires:  python2-jinja2
 BuildRequires:  python2-mock
