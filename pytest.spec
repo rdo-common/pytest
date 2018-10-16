@@ -2,7 +2,7 @@
 
 Name:           pytest
 Version:        3.8.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -65,6 +65,7 @@ Requires:       python2-atomicwrites
 Requires:       python2-attrs
 Requires:       python2-funcsigs
 Requires:       python2-more-itertools >= 4.0.0
+Requires:       python2-pathlib2 >= 2.2.0
 Requires:       python2-pluggy >= 0.7
 Requires:       python2-py >= %{pylib_version}
 Requires:       python2-setuptools
@@ -215,6 +216,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Oct 16 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.8.2-3
+- Add python2-pathlib2 runtime requirement (rhbz#1639718).
+
 * Tue Oct 16 2018 Nils Philippsen <nils@redhat.com> - 3.8.2-2
 - versionize pluggy dependencies
 
