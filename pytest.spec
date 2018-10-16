@@ -1,7 +1,7 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.6.4
+Version:        3.8.2
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -42,11 +42,12 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-funcsigs
 BuildRequires:  python2-hypothesis
 BuildRequires:  python2-more-itertools >= 4.0.0
-BuildRequires:  python2-pluggy
+BuildRequires:  python2-pluggy >= 0.7
 BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
 BuildRequires:  python2-six
+BuildRequires:  python2-pathlib2 >= 2.2.0
 
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
@@ -106,7 +107,7 @@ BuildRequires:  python3-twisted
 Requires:       python3-atomicwrites
 Requires:       python3-attrs
 Requires:       python3-more-itertools
-Requires:       python3-pluggy
+Requires:       python3-pluggy >= 0.7
 Requires:       python3-py >= %{pylib_version}
 Requires:       python3-setuptools
 Requires:       python3-six
@@ -214,6 +215,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Oct 16 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.8.2-1
+- Update to 3.8.2.
+
 * Sat Sep 29 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.6.4-1
 - Update to 3.6.4.
 
