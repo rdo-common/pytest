@@ -65,7 +65,7 @@ Requires:       python2-atomicwrites
 Requires:       python2-attrs
 Requires:       python2-funcsigs
 Requires:       python2-more-itertools >= 4.0.0
-Requires:       python2-pluggy
+Requires:       python2-pluggy >= 0.7
 Requires:       python2-py >= %{pylib_version}
 Requires:       python2-setuptools
 Requires:       python2-six
@@ -85,7 +85,7 @@ BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-more-itertools
-BuildRequires:  python3-pluggy
+BuildRequires:  python3-pluggy >= 0.7
 BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
