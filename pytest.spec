@@ -42,12 +42,12 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-funcsigs
 BuildRequires:  python2-hypothesis
 BuildRequires:  python2-more-itertools >= 4.0.0
+BuildRequires:  python2-pathlib2 >= 2.2.0
 BuildRequires:  python2-pluggy >= 0.7
 BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
 BuildRequires:  python2-six
-BuildRequires:  python2-pathlib2 >= 2.2.0
 
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
