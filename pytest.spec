@@ -1,8 +1,8 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.8.2
-Release:        3%{?dist}
+Version:        3.9.1
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -216,6 +216,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Wed Oct 17 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.9.1-1
+- Update to 3.9.1.
+
 * Tue Oct 16 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.8.2-3
 - Add python2-pathlib2 runtime requirement (rhbz#1639718).
 
