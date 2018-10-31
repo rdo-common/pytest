@@ -1,7 +1,7 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.9.2
+Version:        3.9.3
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -216,6 +216,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Wed Oct 31 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.9.3-1
+- Update to 3.9.3.
+
 * Tue Oct 23 2018 Thomas Moschny <thomas.moschny@gmx.de> - 3.9.2-1
 - Update to 3.9.2.
 
