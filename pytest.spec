@@ -1,8 +1,8 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.9.3
-Release:        2%{?dist}
+Version:        4.2.0
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -216,6 +216,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Fri Feb 08 2019 Alfredo Moralejo <amoralej@redhat.com> - 4.2.0-1
+- Update to 4.2.0.
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.9.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
