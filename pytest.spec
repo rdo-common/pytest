@@ -1,8 +1,9 @@
+%{?python_enable_dependency_generator}
 %global pylib_version 1.5.0
 
 Name:           pytest
 Version:        3.9.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            http://pytest.org
@@ -61,16 +62,6 @@ BuildRequires:  python2-nose
 BuildRequires:  python2-twisted
 %endif
 
-Requires:       python2-atomicwrites
-Requires:       python2-attrs
-Requires:       python2-funcsigs
-Requires:       python2-more-itertools >= 4.0.0
-Requires:       python2-pathlib2 >= 2.2.0
-Requires:       python2-pluggy >= 0.7
-Requires:       python2-py >= %{pylib_version}
-Requires:       python2-setuptools
-Requires:       python2-six
-
 %{?python_provide:%python_provide python2-%{name}}
 # the python2 package was named pytest up to 2.8.7-2
 Provides:       %{name} = %{version}-%{release}
@@ -104,14 +95,6 @@ BuildRequires:  python3-mock
 BuildRequires:  python3-nose
 BuildRequires:  python3-twisted
 %endif
-
-Requires:       python3-atomicwrites
-Requires:       python3-attrs
-Requires:       python3-more-itertools
-Requires:       python3-pluggy >= 0.7
-Requires:       python3-py >= %{pylib_version}
-Requires:       python3-setuptools
-Requires:       python3-six
 
 %{?python_provide:%python_provide python3-%{name}}
 Obsoletes:      platform-python-%{name} < %{version}-%{release}
@@ -216,6 +199,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Mon Feb 18 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.9.3-3
+- Enable python dependency generator
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.9.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
