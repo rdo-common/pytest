@@ -2,12 +2,21 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        3.9.3
-Release:        3%{?dist}
+Version:        4.3.0
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
-URL:            http://pytest.org
-Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+URL:            https://pytest.org
+Source0:        %{pypi_source}
+
+# Python 3.8 compatibility in tests
+Patch1:         https://github.com/pytest-dev/pytest/pull/4804.patch
+
+# Don't override our PYTHONPATH in tests
+Patch2:         https://github.com/pytest-dev/pytest/pull/4914.patch
+
+# Update one call to Sphinx 2.0
+Patch3:         https://github.com/pytest-dev/pytest/pull/4922.patch
 
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
@@ -25,9 +34,11 @@ Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}
 %bcond_without docs
 
 %if %{with docs}
-BuildRequires:  %{_bindir}/sphinx-build-3
-BuildRequires:  python3-sphinxcontrib-trio
 BuildRequires:  %{_bindir}/rst2html
+BuildRequires:  python3-pygments-pytest
+BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinx-removed-in
+BuildRequires:  python3-sphinxcontrib-trio
 %endif
 
 BuildArch:      noarch
@@ -42,6 +53,7 @@ BuildRequires:  python2-attrs
 BuildRequires:  python2-devel
 BuildRequires:  python2-funcsigs
 BuildRequires:  python2-hypothesis
+BuildRequires:  python2-mock
 BuildRequires:  python2-more-itertools >= 4.0.0
 BuildRequires:  python2-pathlib2 >= 2.2.0
 BuildRequires:  python2-pluggy >= 0.7
@@ -57,7 +69,6 @@ BuildRequires:  python2-pytest-timeout
 %if %{with optional_tests}
 BuildRequires:  python2-decorator
 BuildRequires:  python2-jinja2
-BuildRequires:  python2-mock
 BuildRequires:  python2-nose
 BuildRequires:  python2-twisted
 %endif
@@ -91,7 +102,6 @@ BuildRequires:  python3-pytest-timeout
 BuildRequires:  python3-argcomplete
 BuildRequires:  python3-decorator
 BuildRequires:  python3-jinja2
-BuildRequires:  python3-mock
 BuildRequires:  python3-nose
 BuildRequires:  python3-twisted
 %endif
@@ -103,7 +113,7 @@ Obsoletes:      platform-python-%{name} < %{version}-%{release}
 py.test provides simple, yet powerful testing for Python.
 
 %prep
-%autosetup
+%autosetup -p1
 
 %build
 %py2_build
@@ -199,6 +209,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Mar 12 2019 Miro Hrončok <mhroncok@redhat.com> - 4.3.0-1
+- Update to 4.3.0 and fix FTBFS (#1671167, #1687384)
+
 * Mon Feb 18 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.9.3-3
 - Enable python dependency generator
 
