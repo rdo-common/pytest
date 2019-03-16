@@ -2,21 +2,18 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        4.3.0
+Version:        4.3.1
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
 Source0:        %{pypi_source}
 
-# Python 3.8 compatibility in tests
-Patch1:         https://github.com/pytest-dev/pytest/pull/4804.patch
-
 # Don't override our PYTHONPATH in tests
-Patch2:         https://github.com/pytest-dev/pytest/pull/4914.patch
+Patch1:         https://github.com/pytest-dev/pytest/pull/4914.patch
 
 # Update one call to Sphinx 2.0
-Patch3:         https://github.com/pytest-dev/pytest/pull/4922.patch
+Patch2:         https://github.com/pytest-dev/pytest/pull/4922.patch
 
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
@@ -209,6 +206,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Sat Mar 16 2019 Miro Hrončok <mhroncok@redhat.com> - 4.3.1-1
+- Update to 4.3.1
+
 * Tue Mar 12 2019 Miro Hrončok <mhroncok@redhat.com> - 4.3.0-1
 - Update to 4.3.0 and fix FTBFS (#1671167, #1687384)
 
