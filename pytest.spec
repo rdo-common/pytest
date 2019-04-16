@@ -2,18 +2,14 @@
 %global pylib_version 1.5.0
 
 Name:           pytest
-Version:        4.3.1
+Version:        4.4.1
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
 Source0:        %{pypi_source}
-
-# Don't override our PYTHONPATH in tests
-Patch1:         https://github.com/pytest-dev/pytest/pull/4914.patch
-
-# Update one call to Sphinx 2.0
-Patch2:         https://github.com/pytest-dev/pytest/pull/4922.patch
+# https://github.com/pytest-dev/pytest/issues/5046
+Patch0:         5045.patch
 
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
@@ -49,11 +45,10 @@ BuildRequires:  python2-atomicwrites
 BuildRequires:  python2-attrs
 BuildRequires:  python2-devel
 BuildRequires:  python2-funcsigs
-BuildRequires:  python2-hypothesis
 BuildRequires:  python2-mock
 BuildRequires:  python2-more-itertools >= 4.0.0
 BuildRequires:  python2-pathlib2 >= 2.2.0
-BuildRequires:  python2-pluggy >= 0.7
+BuildRequires:  python2-pluggy >= 0.9
 BuildRequires:  python2-py >= %{pylib_version}
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-setuptools_scm
@@ -67,7 +62,6 @@ BuildRequires:  python2-pytest-timeout
 BuildRequires:  python2-decorator
 BuildRequires:  python2-jinja2
 BuildRequires:  python2-nose
-BuildRequires:  python2-twisted
 %endif
 
 %{?python_provide:%python_provide python2-%{name}}
@@ -85,7 +79,7 @@ BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-more-itertools
-BuildRequires:  python3-pluggy >= 0.7
+BuildRequires:  python3-pluggy >= 0.9
 BuildRequires:  python3-py >= %{pylib_version}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
@@ -156,9 +150,12 @@ find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
 %check
+# Metafunc tests use python2-hypothesis, which forms a dependency
+# cycle with pytest.
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python2_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python2_version} -r s testing \
+  --ignore testing/python/metafunc.py \
   %if %{with timeout}
   --timeout=30
   %endif
@@ -206,6 +203,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Apr 16 2019 Thomas Moschny <thomas.moschny@gmx.de> - 4.4.1-1
+- Update to 4.4.1 (see PR#9).
+- Remove test dependencies on python2-hypothesis and python2-twisted (see PR#10).
+
 * Sat Mar 16 2019 Miro Hrončok <mhroncok@redhat.com> - 4.3.1-1
 - Update to 4.3.1
 
