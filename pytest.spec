@@ -3,7 +3,7 @@
 
 Name:           pytest
 Version:        4.4.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
@@ -56,12 +56,6 @@ BuildRequires:  python2-six
 
 %if %{with timeout}
 BuildRequires:  python2-pytest-timeout
-%endif
-
-%if %{with optional_tests}
-BuildRequires:  python2-decorator
-BuildRequires:  python2-jinja2
-BuildRequires:  python2-nose
 %endif
 
 %{?python_provide:%python_provide python2-%{name}}
@@ -203,6 +197,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Fri Jun 21 2019 Petr Viktorin <pviktori@redhat.com> - 4.4.1-2
+- Remove optional test dependencies for Python 2 entirely
+
 * Tue Apr 16 2019 Thomas Moschny <thomas.moschny@gmx.de> - 4.4.1-1
 - Update to 4.4.1 (see PR#9).
 - Remove test dependencies on python2-hypothesis and python2-twisted (see PR#10).
