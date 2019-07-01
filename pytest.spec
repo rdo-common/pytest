@@ -1,15 +1,10 @@
-%{?python_enable_dependency_generator}
-%global pylib_version 1.5.0
-
 Name:           pytest
-Version:        4.4.1
-Release:        2%{?dist}
+Version:        4.6.4
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
 Source0:        %{pypi_source}
-# https://github.com/pytest-dev/pytest/issues/5046
-Patch0:         5045.patch
 
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
@@ -39,32 +34,6 @@ BuildArch:      noarch
 %description
 py.test provides simple, yet powerful testing for Python.
 
-%package -n python2-%{name}
-Summary:        Simple powerful testing with Python
-BuildRequires:  python2-atomicwrites
-BuildRequires:  python2-attrs
-BuildRequires:  python2-devel
-BuildRequires:  python2-funcsigs
-BuildRequires:  python2-mock
-BuildRequires:  python2-more-itertools >= 4.0.0
-BuildRequires:  python2-pathlib2 >= 2.2.0
-BuildRequires:  python2-pluggy >= 0.9
-BuildRequires:  python2-py >= %{pylib_version}
-BuildRequires:  python2-setuptools
-BuildRequires:  python2-setuptools_scm
-BuildRequires:  python2-six
-
-%if %{with timeout}
-BuildRequires:  python2-pytest-timeout
-%endif
-
-%{?python_provide:%python_provide python2-%{name}}
-# the python2 package was named pytest up to 2.8.7-2
-Provides:       %{name} = %{version}-%{release}
-Obsoletes:      %{name} < 2.8.7-3
-
-%description -n python2-%{name}
-py.test provides simple, yet powerful testing for Python.
 
 %package -n python3-%{name}
 Summary:        Simple powerful testing with Python
@@ -72,12 +41,14 @@ BuildRequires:  python3-atomicwrites
 BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
+BuildRequires:  python3-importlib-metadata
 BuildRequires:  python3-more-itertools
-BuildRequires:  python3-pluggy >= 0.9
-BuildRequires:  python3-py >= %{pylib_version}
+BuildRequires:  python3-pluggy >= 0.12
+BuildRequires:  python3-py >= 1.5.0
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-six
+BuildRequires:  python3-wcwidth
 
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
@@ -101,7 +72,6 @@ py.test provides simple, yet powerful testing for Python.
 %autosetup -p1
 
 %build
-%py2_build
 %py3_build
 
 %if %{with docs}
@@ -114,20 +84,15 @@ done
 %endif
 
 %install
-%py2_install
-mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python2_version}
-ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest-2
-mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python2_version}
-ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test-2
 %py3_install
 mv %{buildroot}%{_bindir}/pytest %{buildroot}%{_bindir}/pytest-%{python3_version}
 ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest-3
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python3_version}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
-# use 2.X per default
-ln -snf pytest-%{python2_version} %{buildroot}%{_bindir}/pytest
-ln -snf py.test-%{python2_version} %{buildroot}%{_bindir}/py.test
+# We use 2.X per default, uncomment once it changes
+# ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest
+# ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test
 
 %if %{with docs}
 mkdir -p _htmldocs/html
@@ -139,45 +104,17 @@ done
 %endif
 
 # remove shebangs from all scripts
-find %{buildroot}{%{python2_sitelib},%{python3_sitelib}} \
+find %{buildroot}%{python3_sitelib} \
      -name '*.py' \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
 %check
-# Metafunc tests use python2-hypothesis, which forms a dependency
-# cycle with pytest.
-PATH=%{buildroot}%{_bindir}:${PATH} \
-PYTHONPATH=%{buildroot}%{python2_sitelib} \
-  %{buildroot}%{_bindir}/pytest-%{python2_version} -r s testing \
-  --ignore testing/python/metafunc.py \
-  %if %{with timeout}
-  --timeout=30
-  %endif
-
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing \
   %if %{with timeout}
   --timeout=30
   %endif
-
-%files -n python2-%{name}
-%if %{with docs}
-%doc CHANGELOG.html
-%doc README.html
-%doc CONTRIBUTING.html
-%doc _htmldocs/html
-%endif
-%license LICENSE
-%{_bindir}/pytest
-%{_bindir}/pytest-2
-%{_bindir}/pytest-%{python2_version}
-%{_bindir}/py.test
-%{_bindir}/py.test-2
-%{_bindir}/py.test-%{python2_version}
-%{python2_sitelib}/pytest-*.egg-info/
-%{python2_sitelib}/_pytest/
-%{python2_sitelib}/pytest.py*
 
 %files -n python3-%{name}
 %if %{with docs}
@@ -187,8 +124,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %doc _htmldocs/html
 %endif
 %license LICENSE
+#{_bindir}/pytest
 %{_bindir}/pytest-3
 %{_bindir}/pytest-%{python3_version}
+#{_bindir}/py.test
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/pytest-*.egg-info/
@@ -197,6 +136,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Mon Jul 01 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.4-1
+- Update to 4.6.4, move python2-pytest to its own source package
+
 * Fri Jun 21 2019 Petr Viktorin <pviktori@redhat.com> - 4.4.1-2
 - Remove optional test dependencies for Python 2 entirely
 
