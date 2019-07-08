@@ -6,6 +6,10 @@ License:        MIT
 URL:            https://pytest.org
 Source0:        %{pypi_source}
 
+# Use importlib.metadata from stdlib on Python 3.8
+# Rebased from https://github.com/pytest-dev/pytest/pull/5539
+Patch0:         5539.patch
+
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
@@ -41,7 +45,6 @@ BuildRequires:  python3-atomicwrites
 BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
-BuildRequires:  python3-importlib-metadata
 BuildRequires:  python3-more-itertools
 BuildRequires:  python3-pluggy >= 0.12
 BuildRequires:  python3-py >= 1.5.0
@@ -49,6 +52,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-six
 BuildRequires:  python3-wcwidth
+BuildRequires:  (python3-importlib-metadata if python3 < 3.8)
 
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
