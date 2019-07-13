@@ -67,7 +67,8 @@ BuildRequires:  python3-twisted
 %endif
 
 %{?python_provide:%python_provide python3-%{name}}
-Obsoletes:      platform-python-%{name} < %{version}-%{release}
+Provides:       pytest = %{version}-%{release}
+Conflicts:      python2-pytest < 4.6
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
@@ -94,9 +95,9 @@ ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest-3
 mv %{buildroot}%{_bindir}/py.test %{buildroot}%{_bindir}/py.test-%{python3_version}
 ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test-3
 
-# We use 2.X per default, uncomment once it changes
-# ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest
-# ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test
+# We use 3.X per default
+ln -snf pytest-%{python3_version} %{buildroot}%{_bindir}/pytest
+ln -snf py.test-%{python3_version} %{buildroot}%{_bindir}/py.test
 
 %if %{with docs}
 mkdir -p _htmldocs/html
@@ -128,10 +129,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %doc _htmldocs/html
 %endif
 %license LICENSE
-#{_bindir}/pytest
+%{_bindir}/pytest
 %{_bindir}/pytest-3
 %{_bindir}/pytest-%{python3_version}
-#{_bindir}/py.test
+%{_bindir}/py.test
 %{_bindir}/py.test-3
 %{_bindir}/py.test-%{python3_version}
 %{python3_sitelib}/pytest-*.egg-info/
@@ -142,6 +143,7 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %changelog
 * Mon Jul 01 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.4-1
 - Update to 4.6.4, move python2-pytest to its own source package
+- Make /usr/bin/pytest and /usr/bin/py.test Python 3
 
 * Fri Jun 21 2019 Petr Viktorin <pviktori@redhat.com> - 4.4.1-2
 - Remove optional test dependencies for Python 2 entirely
