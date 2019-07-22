@@ -114,6 +114,7 @@ find %{buildroot}%{python3_sitelib} \
      -exec sed -i -e '1{/^#!/d}' {} \;
 
 %check
+PYTHONDONTWRITEBYTECODE=1 \
 PATH=%{buildroot}%{_bindir}:${PATH} \
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   %{buildroot}%{_bindir}/pytest-%{python3_version} -r s testing \
