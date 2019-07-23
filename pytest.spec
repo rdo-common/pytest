@@ -1,6 +1,6 @@
 Name:           pytest
 Version:        4.6.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
@@ -68,7 +68,7 @@ BuildRequires:  python3-twisted
 
 %{?python_provide:%python_provide python3-%{name}}
 Provides:       pytest = %{version}-%{release}
-Conflicts:      python2-pytest < 4.6
+Conflicts:      python-pytest < 4.6
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
@@ -142,6 +142,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Tue Jul 23 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.4-2
+- Fix a bad conflict
+
 * Mon Jul 01 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.4-1
 - Update to 4.6.4, move python2-pytest to its own source package
 - Make /usr/bin/pytest and /usr/bin/py.test Python 3
