@@ -1,6 +1,6 @@
 Name:           pytest
-Version:        4.6.4
-Release:        3%{?dist}
+Version:        4.6.5
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
@@ -31,6 +31,7 @@ BuildRequires:  python3-pygments-pytest
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx-removed-in
 BuildRequires:  python3-sphinxcontrib-trio
+BuildRequires:  make
 %endif
 
 BuildArch:      noarch
@@ -142,6 +143,10 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Wed Aug 14 2019 Thomas Moschny <thomas.moschny@gmx.de> - 4.6.5-1
+- Update to 4.6.5.
+- Add missing BR on make.
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 4.6.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
