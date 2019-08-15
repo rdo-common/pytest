@@ -50,6 +50,7 @@ BuildRequires:  python3-attrs
 BuildRequires:  python3-devel
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-more-itertools
+BuildRequires:  python3-packaging
 BuildRequires:  python3-pluggy >= 0.12
 BuildRequires:  python3-py >= 1.5.0
 BuildRequires:  python3-setuptools
