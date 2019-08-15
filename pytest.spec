@@ -1,3 +1,6 @@
+%global _without_docs 1
+%global _without_optional_tests 1
+%global _without_timeout 1
 Name:           pytest
 Version:        4.6.5
 Release:        2%{?dist}
@@ -13,20 +16,17 @@ Patch0:         5539.patch
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
-#bcond_without timeout
-%bcond_with timeout
+%bcond_without timeout
 
 # When building pytest for the first time with new Python version
 # we might not yet have all the BRs, this allows us to build without some that
 # are likely not yet built.
 # Pytest will skip the related tests, so we only conditionalize the BRs
-#bcond_without optional_tests
-%bcond_with optional_tests
+%bcond_without optional_tests
 
 # When building pytest for the first time with new Python version
 # we also don't have sphinx yet and cannot build docs.
-#bcond_without docs
-%bcond_with docs
+%bcond_without docs
 
 %if %{with docs}
 BuildRequires:  %{_bindir}/rst2html
@@ -146,8 +146,8 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
-* Thu Aug 15 2019 Richard Shaw <hobbes1069@gmail.com> - 4.6.5-2
-- Bootstrap build for Python 3.8, all optional BRs disabled.
+* Thu Aug 15 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.5-2
+- Bootstrap for Python 3.8
 
 * Wed Aug 14 2019 Thomas Moschny <thomas.moschny@gmx.de> - 4.6.5-1
 - Update to 4.6.5.
