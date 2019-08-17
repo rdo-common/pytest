@@ -1,9 +1,6 @@
-%global _without_docs 1
-%global _without_optional_tests 1
-%global _without_timeout 1
 Name:           pytest
 Version:        4.6.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
@@ -147,6 +144,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Sat Aug 17 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.5-3
+- Rebuilt for Python 3.8
+
 * Thu Aug 15 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.5-2
 - Bootstrap for Python 3.8
 
