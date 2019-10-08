@@ -54,7 +54,6 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-six
 BuildRequires:  python3-wcwidth
-BuildRequires:  (python3-importlib-metadata if python3 < 3.8)
 
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
