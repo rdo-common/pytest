@@ -1,14 +1,10 @@
 Name:           pytest
-Version:        4.6.5
-Release:        4%{?dist}
+Version:        4.6.6
+Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
 Source0:        %{pypi_source}
-
-# Use importlib.metadata from stdlib on Python 3.8
-# Rebased from https://github.com/pytest-dev/pytest/pull/5539
-Patch0:         5539.patch
 
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
@@ -143,6 +139,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Fri Oct 25 2019 Thomas Moschny <thomas.moschny@gmx.de> - 4.6.6-1
+- Update to 4.6.6.
+
 * Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 4.6.5-4
 - Rebuilt for Python 3.8.0rc1 (#1748018)
 
