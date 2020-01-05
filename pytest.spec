@@ -1,5 +1,5 @@
 Name:           pytest
-Version:        4.6.8
+Version:        4.6.9
 Release:        1%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
@@ -139,6 +139,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} \
 %{python3_sitelib}/__pycache__/pytest.*
 
 %changelog
+* Sun Jan  5 2020 Thomas Moschny <thomas.moschny@gmx.de> - 4.6.9-1
+- Update to 4.6.9.
+
 * Fri Jan  3 2020 Thomas Moschny <thomas.moschny@gmx.de> - 4.6.8-1
 - Update to 4.6.8.
 
