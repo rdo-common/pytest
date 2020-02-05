@@ -1,3 +1,5 @@
+%{?python_enable_dependency_generator}
+
 Name:           pytest
 Version:        4.6.9
 Release:        2%{?dist}
@@ -9,17 +11,17 @@ Source0:        %{pypi_source}
 # The test in this specfile use pytest-timeout
 # When building pytest for the first time with new Python version
 # that is not possible as it depends on pytest
-%bcond_without timeout
+%bcond_with timeout
 
 # When building pytest for the first time with new Python version
 # we might not yet have all the BRs, this allows us to build without some that
 # are likely not yet built.
 # Pytest will skip the related tests, so we only conditionalize the BRs
-%bcond_without optional_tests
+%bcond_with optional_tests
 
 # When building pytest for the first time with new Python version
 # we also don't have sphinx yet and cannot build docs.
-%bcond_without docs
+%bcond_with docs
 
 %if %{with docs}
 BuildRequires:  %{_bindir}/rst2html
@@ -50,6 +52,8 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
 BuildRequires:  python3-six
 BuildRequires:  python3-wcwidth
+BuildRequires:  python3-importlib-metadata
+
 
 %if %{with timeout}
 BuildRequires:  python3-pytest-timeout
@@ -66,6 +70,7 @@ BuildRequires:  python3-twisted
 %{?python_provide:%python_provide python3-%{name}}
 Provides:       pytest = %{version}-%{release}
 Conflicts:      python-pytest < 4.6
+Requires:       python3-importlib-metadata
 
 %description -n python3-%{name}
 py.test provides simple, yet powerful testing for Python.
